@@ -53,7 +53,8 @@
 test.grid2d =
 function()
 {
-    NA
+    # Grid Data:
+    grid2d(x = (0:10)/10)
     
     # Return Value:
     return()    
