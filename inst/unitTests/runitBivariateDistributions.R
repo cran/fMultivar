@@ -50,26 +50,6 @@
 ################################################################################
 
 
-test.aaa = 
-function()
-{
-    # Help File:
-    helpFile = function() { 
-        example(BivariateTools, ask = FALSE)
-        return() 
-    }
-    checkIdentical(
-        target = class(try(helpFile())),
-        current = "NULL")
-
-    # Return Value:
-    return()    
-}
-
-
-################################################################################
-
-
 test.grid2d =
 function()
 {
@@ -254,18 +234,6 @@ function()
     return()    
 }
 
-
-
-################################################################################
-
-
-if (FALSE) {
-    require(RUnit)
-    testResult = runTestFile("C:/Rmetrics/SVN/trunk/fMultivar/tests/runit7A.R",
-        rngKind = "Marsaglia-Multicarry", rngNormalKind = "Inversion")
-    printTextProtocol(testResult)
-}
-   
 
 ################################################################################
     

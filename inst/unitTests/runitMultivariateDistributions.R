@@ -45,26 +45,6 @@
 ################################################################################
 
 
-test.aaa = 
-function()
-{
-    # Help File:
-    helpFile = function() { 
-        example(MultivariateDistribution, ask = FALSE)
-        return() 
-    }
-    checkIdentical(
-        target = class(try(helpFile())),
-        current = "NULL")
-
-    # Return Value:
-    return()    
-}
-
-
-################################################################################
-
-
 test.dmvsnorm =
 function()
 {
@@ -119,6 +99,8 @@ function()
     # Multivariate Skew Normal
     
     # RVs:
+    RNGkind(kind = "Marsaglia-Multicarry", normal.kind = "Inversion")
+    set.seed(4711, kind = "Marsaglia-Multicarry")
     N = 5000
     z = rmvsnorm(N, dim = 2, mu = rep(0, 2), Omega = diag(2), alpha = rep(1, 2))
     
@@ -193,6 +175,8 @@ function()
     # Multivariate Skew Sudent-t
     
     # RVs:
+    RNGkind(kind = "Marsaglia-Multicarry", normal.kind = "Inversion")
+    set.seed(4711, kind = "Marsaglia-Multicarry")
     N = 5000
     z = rmvsnorm(N, dim = 2, mu = rep(0, 2), Omega = diag(2), alpha = c(-1, 1))
     
@@ -230,9 +214,31 @@ function()
     
     # Fit:
     fit = mvFit(x = z, method = "snorm")
-
+    
+    # Print:
     print(fit)
-    plot(fit, which = "all")
+    
+    # Interactive Plot:
+    # plot(fit, which = "ask")
+    
+    # Scatterplot:
+    par(mfrow = c(1, 1))
+    plot(fit, which = 1)
+    
+    # Normal QQ Plot of Mahalanobis Distances:
+    par(mfrow = c(2, 2))
+    plot(fit, which = 2)
+    
+    # Skew Normal QQ Plot of Mahalanobis Distances:
+    plot(fit, which = 3)
+    
+    # Normal PP Plot of Mahalanobis Distances:
+    plot(fit, which = 4)
+    
+    # Skew Normal PP Plot of Mahalanobis Distances:
+    plot(fit, which = 5)
+       
+    # Summary:
     summary(fit, doplot = FALSE)
 
     # Return Value:
@@ -253,32 +259,44 @@ function()
     # RVs:
     RNGkind(kind = "Marsaglia-Multicarry", normal.kind = "Inversion")
     set.seed(4711, kind = "Marsaglia-Multicarry")
-    N = 5000
-    z = rmvst(N, dim = 2, mu = rep(0, 2), Omega = diag(2), alpha = c(-1, 1))
+    N = 1000
+    z = rmvst(N, dim = 2, mu = rep(0, 2), Omega = diag(2), alpha = c(-1, 1), 
+        df = 4)
     
     # Fit:
-    ### fit = mvFit(x = z, method = "st", trace = TRUE)                  # CHECK
+    # fit = mvFit(x = z, method = "st", trace = TRUE)       
+    fit = mvFit(x = z, method = "st")                    
 
-    # Output:
-    ### print(fit)
-    ### plot(fit, which = "all")
-    ### summary(fit, doplot = FALSE)
+    # Print:
+    print(fit)
+    
+    # Interactive Plot:
+    # plot(fit, which = "ask")
+    
+    # Scatterplot:
+    par(mfrow = c(1, 1))
+    plot(fit, which = 1)
+    
+    # Normal QQ Plot of Mahalanobis Distances:
+    par(mfrow = c(2, 2))
+    plot(fit, which = 2)
+    
+    # Skew Normal QQ Plot of Mahalanobis Distances:
+    plot(fit, which = 3)
+    
+    # Normal PP Plot of Mahalanobis Distances:
+    plot(fit, which = 4)
+    
+    # Skew Normal PP Plot of Mahalanobis Distances:
+    plot(fit, which = 5)
+       
+    # Summary:
+    summary(fit, doplot = FALSE)
 
     # Return Value:
     return()    
 }
 
-
-################################################################################
-
-
-if (FALSE) {
-    require(RUnit)
-    testResult = runTestFile("C:/Rmetrics/SVN/trunk/fMultivar/tests/runit7B.R",
-        rngKind = "Marsaglia-Multicarry", rngNormalKind = "Inversion")
-    printTextProtocol(testResult)
-}
-   
 
 ################################################################################
     
