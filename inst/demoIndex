@@ -1,19 +1,11 @@
 funMultivar                 fMultivar Function Addon
-funSystemfit                R functions from package systemfit
+funSystemfit                Builtin functions from packages systemfit
 
-xmpRegRecession             Modelling US Recession
-
-xmpEqnsGrunfeld             OLS and SUR Modelling of Grunfeld's Data
-
-xmpTradingIndicators        Implements More Trading Indicator Functions
-xmpTradingPatternCreation   Creates Trading Pattern
-xmpTradingPatternTests      Performs Windowed Correlation Tests
-xmpTradingModels            Trades with MACD and Trend Indicators
-
-xmpRollingAnalysis          Implements SMA and EWMA Functions
-
-xmpMatrixAddonNA            Manages Missing Values in Matrix Objects
-xmpMatrixSummary            Matrix Arithmetics and Linear Algebra
-xmpMatrixVech               Stack Operations and Matrix Products
+xmpDWChapter41              Technical Analysis and Regression Based Trading
+xmpDWChapter42              Forecasting with Neural Networks
+xmpDWChapter43              Demand and Supply Models
+xmpDWChapter44              Vector ARMA Models and Cointegration
+xmpDWChapter45              Multivariate GARCH Models
+xmpDWChapter46              Matrix Calculus and Linear Algebra Addon
 
 xmpZWChapter10              Zivot-Wang Chapter 10 Linear SUR Modelling

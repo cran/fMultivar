@@ -406,7 +406,7 @@ c Need var calculated to do drop-one calculations from t values.
 23128 continue
 23130 if(.not.(dofit.gt.0 ))goto 23131
       jo=1
-      rsstemp=10e99
+      rsstemp=10d99
       minterm=0
       do 23132 ii=2, lenb 
       if(.not.(tempin(ii).eq.1))goto 23134

@@ -19,8 +19,10 @@
 \alias{residuals.fEQNS}
 \alias{vcov.fEQNS}
 
+\alias{systemfitBuiltin}
 
-\title{Regression Tests}
+
+\title{Equations Modelling}
 
 
 \description{
@@ -45,7 +47,7 @@
 	is made available.
 	\cr
 
-	The Models based on 'systemfit' Include:
+	The Models Based on 'systemfit' Include:
 	
 	\tabular{ll}{
 	\code{"OLS"} \tab Ordinary Least Square Modelling, \cr
@@ -62,12 +64,16 @@
 	\code{summary} \tab S3 Summary method for objects of class 'fEQNS', \cr
 	\code{predict} \tab S3 Predict method for objects of class 'fEQNS'. }
 				
-	S-Plus like Finmetrics function:
+	S-Plus like Finmetrics Function:
 	
 	\tabular{ll}{
 	\code{SUR} \tab A S-PLUS like function for \code{"SUR"} models. }
 			
 	Note, that the contributed R package \code{systemfit} is required!
+	If the package \code{systemfit} is not installed on your computer
+	or not availalble for your operating system, then you can load it 
+	as builtin function calling the internal Rmetrics function 
+	\code{systemfitBuiltin()}.
 	
 }
 	
@@ -88,6 +94,8 @@ eqnsFit(formulas, data = list(), method = c("OLS", "WLS", "SUR", "2SLS",
 \method{vcov}{fEQNS}(object, \dots)
 
 SUR(formulas, data = list(), \dots)
+
+systemfitBuiltin(builtin = "/fMultivar/demo/funSystemfit.R")
 } 
 
 
@@ -224,6 +232,10 @@ SUR(formulas, data = list(), \dots)
  
 \arguments{
     
+	\item{builtin}{
+		a character string giving the path and name of the \code{systemfit}
+		builtin package. By default \code{"/fMultivar/demo/funSystemfit.R"}.
+		}
 	\item{ci}{
 		[predict] - \cr
 		the confidence interval, by default 0.95.
@@ -407,154 +419,217 @@ SUR(formulas, data = list(), \dots)
 		}
     \item{confint}{
     	the confidence intervals of the coefficients of one equation 
-    	from an object of class \code{fEQNS}. }
+    	from an object of class \code{fEQNS}. 
+    	}
     \item{fitted}{
     	the fitted values of all equations from an object of class 
-    	\code{fEQNS}. }
+    	\code{fEQNS}. 
+    	}
     \item{residuals}{
-    	 the residuals from an object of class \code{fEQNS}. }
+    	 the residuals from an object of class \code{fEQNS}. 
+    	 }
     \item{vcov}{
     	the variance covariance matrix of all coefficients from an 
-    	object of class \code{fEQNS}. }
+    	object of class \code{fEQNS}. 
+    	}
        	   
     The remaining elements of the slot \code{@fit$fit} are:
 	
 	\item{method}{
-		estimation method. }
+		estimation method. 
+		}
 	\item{g}{
-		number of equations. }
+		number of equations. 
+		}
 	\item{n}{
-		total number of observations. }
+		total number of observations. 
+		}
 	\item{k}{
-		total number of coefficients. }
+		total number of coefficients. 
+		}
 	\item{ki}{
-		total number of linear independent coefficients. }
+		total number of linear independent coefficients. 
+		}
 	\item{df}{
-		degrees of freedom of the whole system. }
+		degrees of freedom of the whole system. 
+		}
 	\item{iter}{
-		number of iteration steps. }
+		number of iteration steps. 
+		}
 	\item{b}{
 		vector of all estimated coefficients. }
 	\item{bt}{
-		coefficient vector transformed by \code{TX}. }
+		coefficient vector transformed by \code{TX}. 
+		}
 	\item{se}{
-		estimated standard errors of \code{b}. }
+		estimated standard errors of \code{b}. 
+		}
 	\item{t}{
-		t values for \code{b}. }
+		t values for \code{b}. 
+		}
 	\item{p}{
-		p values for \code{b}. }
+		p values for \code{b}. 
+		}
 	\item{bcov}{
-		estimated covariance matrix of \code{b}. }
+		estimated covariance matrix of \code{b}. 
+		}
 	\item{btcov}{
-		covariance matrix of \code{bt}. }
+		covariance matrix of \code{bt}. 
+		}
 	\item{rcov}{
-		estimated residual covariance matrix. }
+		estimated residual covariance matrix. 
+		}
 	\item{drcov}{
-		determinant of \code{rcov}. }
+		determinant of \code{rcov}. 
+		}
 	\item{rcovest}{
 		residual covariance matrix used for estimation, 
-		only "SUR" and "3SLS". }
+		only "SUR" and "3SLS". 
+		}
 	\item{rcor}{
-		estimated residual correlation matrix. }
+		estimated residual correlation matrix. 
+		}
 	\item{olsr2}{
-		System OLS R-squared value. }
+		System OLS R-squared value. 
+		}
 	\item{mcelr2}{
-		McElroys R-squared value for the system, only "SUR" and "3SLS". }
+		McElroys R-squared value for the system, only "SUR" and "3SLS". 
+		}
 	\item{y}{
-		vector of all (stacked) endogenous variables}
+		vector of all (stacked) endogenous variables.
+		}
 	\item{x}{
-		matrix of all (diagonally stacked) regressors}
+		matrix of all (diagonally stacked) regressors.
+		}
 	\item{h}{
 		matrix of all (diagonally stacked) instrumental variables, 
-		only "2SLS" and "3SLS". }
+		only "2SLS" and "3SLS". 
+		}
 	\item{data}{
-		data frame of the whole system including instruments. }
+		data frame of the whole system including instruments. 
+		}
 	\item{R.restr}{
-		the restriction matrix. }
+		the restriction matrix. 
+		}
 	\item{q.restr}{
-		the restriction vector. }
+		the restriction vector. 
+		}
 	\item{TX}{
-		matrix used to transform the regressor matrix. }
+		matrix used to transform the regressor matrix. 
+		}
 	\item{maxiter}{
-		maximum number of iterations. }
+		maximum number of iterations. 
+		}
 	\item{tol}{
-		tolerance level indicating when to stop the iteration. }
+		tolerance level indicating when to stop the iteration. 
+		}
 	\item{rcovformula}{
-		formula to calculate the estimated residual covariance matrix. }
+		formula to calculate the estimated residual covariance matrix. 
+		}
 	\item{formula3sls}{
-		formula for calculating the "3SLS" estimator. }
+		formula for calculating the "3SLS" estimator. 
+		}
 	\item{probdfsys}{
-		system degrees of freedom to calculate prob values?}
+		system degrees of freedom to calculate prob values?
+		}
 	\item{single.eq.sigma}{
-		different \eqn{\sigma^2}s for each single equation?}
+		different \eqn{\sigma^2}s for each single equation?
+		}
 	\item{solvetol}{
 		tolerance level when inverting a matrix or calculating 
-		a determinant. }
+		a determinant. 
+		}
 	
 	The elements of the class \code{systemfit.eq} are:
 	
 	\item{eq}{
 		a list that contains the results that belong to the individual 
-		equations. }
+		equations. 
+		}
 	\item{eqnlabel*}{
-		the equation label of the i-th equation (from the labels list). }
+		the equation label of the i-th equation (from the labels list). 
+		}
 	\item{formula*}{
-		model formula of the i-th equation. }
+		model formula of the i-th equation. 
+		}
 	\item{inst*}{
-		instruments of the i-th equation, only 2SLS and 3SLS. }
+		instruments of the i-th equation, only 2SLS and 3SLS. 
+		}
 	\item{n*}{
-		number of observations of the i-th equation. }
+		number of observations of the i-th equation. 
+		}
 	\item{k*}{
 		number of coefficients/regressors in the i-th equation (including 
-		the constant). }
+		the constant). 
+		}
 	\item{ki*}{
 		number of linear independent coefficients in the i-th equation 
 		(including the constant differs from \code{k} only if there are 
-		restrictions that are not cross-equation). }
+		restrictions that are not cross-equation). 
+		}
 	\item{df*}{
-		degrees of freedom of the i-th equation. }	
+		degrees of freedom of the i-th equation. 
+		}	
 	\item{b*}{
-		estimated coefficients of the i-th equation. }
+		estimated coefficients of the i-th equation. 
+		}
 	\item{se*}{
-		estimated standard errors of \code{b}. }
+		estimated standard errors of \code{b}. 
+		}
 	\item{t*}{
-		t values for \code{b}. }
+		t values for \code{b}. 
+		}
 	\item{p*}{
-		p values for \code{b}. }
+		p values for \code{b}. 
+		}
 	\item{covb*}{
-		estimated covariance matrix of \code{b}. }
+		estimated covariance matrix of \code{b}. 
+		}
 	\item{y*}{
 		vector of endogenous variable (response values) of the i-th 
-		equation. }
+		equation. 
+		}
 	\item{x*}{
-		matrix of regressors (model matrix) of the i-th equation. }
+		matrix of regressors (model matrix) of the i-th equation. 
+		}
 	\item{h*}{
 		matrix of instrumental variables of the i-th equation, 
-		only "2SLS" and "3SLS". }
+		only "2SLS" and "3SLS". 
+		}
 	\item{data*}{
-		data frame (including instruments) of the i-th equation. }
+		data frame (including instruments) of the i-th equation. 
+		}
 	\item{fitted*}{
-		vector of fitted values of the i-th equation. }
+		vector of fitted values of the i-th equation. 
+		}
 	\item{residuals*}{
-		vector of residuals of the i-th equation. }	
+		vector of residuals of the i-th equation. 
+		}	
 	\item{ssr*}{
-		sum of squared residuals of the i-th equation. }
+		sum of squared residuals of the i-th equation. 
+		}
 	\item{mse*}{
 		estimated variance of the residuals (mean of squared errors)  
-		of the i-th equation. }
+		of the i-th equation. 
+		}
 	\item{s2*}{
 		estimated variance of the residuals (\eqn{\hat{\sigma}^2}) of 
-		the i-th equation. }
+		the i-th equation. 
+		}
 	\item{rmse*}{
 		estimated standard error of the residulas (square root of mse) 
-		of the i-th equation. }
+		of the i-th equation. 
+		}
 	\item{s*}{
 		estimated standard error of the residuals (\eqn{\hat{\sigma}}) 
-		of the i-th equation. }
+		of the i-th equation. 
+		}
 	\item{r2*}{
-		R-squared (coefficient of determination). }
+		R-squared (coefficient of determination). 
+		}
 	\item{adjr2*}{
-		adjusted R-squared value. }
+		adjusted R-squared value. 
+		}
 		
 
 	\bold{S3 Methods:}
@@ -620,8 +695,7 @@ Theil H., (1971);
 
 
 \examples{
-## SOURCE("fBasics.A0-SPlusCompatibility")
-## SOURCE("fMultivar.A3-EquationsModelling")
+## SOURCE("fMultivar.B3-EquationsModelling")
 
 ## Note, "systemfit" is required:
    SYSTEMFIT = require(systemfit)

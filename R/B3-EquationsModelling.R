@@ -48,6 +48,7 @@
 # S3-METHODS:           DESCRIPTION:
 #  predict.fEQNS         S3: Prediction method for an object of class fEQNS
 # S-PLUS LIKE:          WRAPPER:
+#  systemfitBuiltin      Builtin contributed R package "systemfit"
 #  SUR                   SUR Wrapper
 ################################################################################
 # REQUIRED PACLKAGE - PACKAGE DESCRIPTION:
@@ -210,7 +211,8 @@ function(object, ...)
 
 coef.fEQNS = 
 function(object, ...) 
-{
+{	# A function implemented by Diethelm Wuertz
+
     # Description:
     #   Returns the fitted values
     
@@ -230,7 +232,8 @@ function(object, ...)
 
 fitted.fEQNS = 
 function(object, ...) 
-{
+{	# A function implemented by Diethelm Wuertz
+
     # Description:
     #   Returns the fitted values
     
@@ -257,7 +260,8 @@ function(object, ...)
 
 residuals.fEQNS = 
 function(object, ...) 
-{
+{	# A function implemented by Diethelm Wuertz
+
     # Description:
     #   Returns all residuals
     
@@ -285,7 +289,8 @@ function(object, ...)
 
 vcov.fEQNS = 
 function(object, ...) 
-{
+{	# A function implemented by Diethelm Wuertz
+
     # Description:
     #   Returns the variance-covariance matrix of the coefficients
     
@@ -302,8 +307,8 @@ function(object, ...)
 predict.fEQNS = 
 function (object, newdata = object@data, se.fit = FALSE, se.pred = FALSE, 
 interval = "none", ci = 0.95, ...) 
-{   
-    
+{   # A function implemented by Diethelm Wuertz
+
     # Predict:
     ans = predict.systemfit(object = object@fit$fit, data = newdata,
         se.fit = se.fit, se.pred = se.pred, interval = interval, 
@@ -317,9 +322,25 @@ interval = "none", ci = 0.95, ...)
 # ******************************************************************************
 
 
+systemfitBuiltin = 
+function(builtin = "/fMultivar/demo/funSystemfit.R") 
+{	# A function implemented by Diethelm Wuertz
+
+	# Builtin:
+	Builtin = paste(.Library, builtin, sep = "") 
+	
+	# Return Value:
+	source(Builtin)	
+}
+
+
+# ------------------------------------------------------------------------------
+
+
 SUR = 
 function(formulas, data = list(), ...)
-{
+{	# A function implemented by Diethelm Wuertz
+
     # Fit:
     ans = eqnsFit(formulas = formulas, data = data, method = "SUR", ...)
         

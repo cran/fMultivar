@@ -29,28 +29,28 @@
     
 ################################################################################
 # GENERATION:           DESCRIPTION:
-#  matrix               R  creates a matrix from the given set of values
-#   diag                R  creates a diagonal matrix or extracts diagonals
-#   triang              M  extracs the lower tridiagonal part from a matrix
-#   Triang              M  extracs the upper tridiagonal part from a matrix
-#   pascal              M  creates a pascal matrix
-#   colVec              M  creates a column vector from a vector
-#   rowVec              M  creates a row vector from a vector
-#  as.matrix            R  attempts to turn its argument into a matrix     
-#  is.matrix            R  tests if its argument is a (strict) matrix
-#  dimnames             R  retrieves or sets the dimnames of an object
-#  colnames|rownames    R  retrieves or sets the row or column names 
+#  matrix               R  Creates a matrix from the given set of values
+#   diag                R  Creates a diagonal matrix or extracts diagonals
+#   triang              M  Extracs the lower tridiagonal part from a matrix
+#   Triang              M  Extracs the upper tridiagonal part from a matrix
+#   pascal              M  Creates a Pascal matrix
+#   colVec              M  Creates a column vector from a vector
+#   rowVec              M  Creates a row vector from a vector
+#  as.matrix            R  Attempts to turn its argument into a matrix     
+#  is.matrix            R  Tests if its argument is a (strict) matrix
+#  dimnames             R  Retrieves or sets the dimnames of an object
+#  colnames|rownames    R  Retrieves or sets the row or column names 
 #  colIds|rowIds        M  ... use alternatively
 #  colIds<-|rowIds<-    M  ... for assignments
 # SUBSETS:              DESCRIPTION:
-#  dim                  R  returns the dimension of a matrix object
-#  ncol|nrow            R  counts columns|rows of a matrix object
-#  length               R  counts elements of a matrix object
-#   "["|"[["            R  subsets a matrix object
+#  dim                  R  Returns the dimension of a matrix object
+#  ncol|nrow            R  Counts columns|rows of a matrix object
+#  length               R  Counts elements of a matrix object
+#   "["|"[["            R  Cubsets a matrix object
 #   (Arith)             R  Elementwise Arithmetic: + - * /
 #   (Lops)              R  Elementwise logical Ops: > < >= <= == !=
-#  cbind|rbind          R  augments a matrix object by columns|rows
-#  na.omit              R  removes NA from a matrix object
+#  cbind|rbind          R  Augments a matrix object by columns|rows
+#  na.omit              R  Removes NA from a matrix object
 # BASIC STATISTICS:     DESCRIPTION:
 #  var                  R  returns the variance matrix
 #  cov                  R  returns the covariance matrix
@@ -63,12 +63,12 @@
 #   col|rowKurtosis     B  calculates column|row kurtosis 
 #   col|rowCumsums      B  calculates column|row cumulated sums 
 # LINEAR ALGEBRA:       DESCRIPTION:
+#  t                    R  returns the transposed matrix
 #  det                  R  returns the determinant of a matrix
 #  inv|chol2inv       M|R  returns the inverse of a matrix
-#  norm                 S  returns the norm of a matrix
-#  rk                   S  returns the rank of a matrix
-#  tr                   S  returns trace of a matrix
-#  t                    R  returns the transposed matrix
+#  norm                 M  returns the norm of a matrix
+#  rk                   M  returns the rank of a matrix
+#  tr                   M  returns the trace of a matrix
 #  %*%                  R  returns the product of two matrices
 #  %x%|kron           R|S  returns the Kronecker product
 #  mexp                 M  computes the exponential of a square matrix
@@ -381,12 +381,15 @@ function(x, p = 2)
 	ans = NA
 	if (p == 1) {
 		x = abs(x)
-		ans = max(apply(x, 2, sum)) }
+		ans = max(apply(x, 2, sum)) 
+	}
 	if (p == 2) {
-		ans = sqrt(max(eigen(t(x) %*% x)$values))}
+		ans = sqrt(max(eigen(t(x) %*% x)$values))
+	}
 	if (p == Inf) {
 		x = abs(x)
-		ans = max(apply(x, 1, sum)) }
+		ans = max(apply(x, 1, sum)) 
+	}
 	if (is.na(ans)) stop("Invalid value for p")
 		
 	# Return value:
@@ -409,9 +412,10 @@ function(x, method = c("qr", "chol"))
     # Rank:
     method = method[1]
     if (method == "chol") {
-        ans = attr(chol(x, pivot = TRUE), "rank") }
-    else {
-        ans = qr(x)$rank }
+        ans = attr(chol(x, pivot = TRUE), "rank") 
+    } else {
+        ans = qr(x)$rank 
+    }
     
     # Return Value:
     ans 
@@ -432,13 +436,14 @@ function(x)
     
     # Trace:
     if (dim(x)[1] != dim(x)[2] ) {
-        return(NA) }
-    else {
-        return(sum(diag(x))) } }
+        return(NA) 
+    } else {
+        return(sum(diag(x))) 
+    } 
         
     # Return Value:
     invisible()
-            
+}            
 
 # ------------------------------------------------------------------------------
 
@@ -493,8 +498,7 @@ function(x, order = 8, method = c("pade", "taylor"))
     	stop("order must be an integer number")
     if (!(method %in% c("pade", "taylor"))){
         stop("method must be \"pade\" or \"taylor\"")} 
-          
-    
+            
     # Compute:
     size = as.integer(dim(a)[1])
     a = as.double(as.vector(a))
@@ -549,7 +553,6 @@ function(x)
 	
 	# Return Value:
 	t(x[!upper.tri(x)])
-
 }
 
 

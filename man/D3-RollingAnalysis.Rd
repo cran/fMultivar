@@ -32,7 +32,7 @@
 
 
 \usage{
-rollFun(x, n, FUN, ...)
+rollFun(x, n, trim = TRUE, na.rm = FALSE, FUN, ...)
 rollMin(x, n = 9, trim = TRUE, na.rm = FALSE) 
 rollMax(x, n = 9, trim = TRUE, na.rm = FALSE)
 rollMean(x, n = 9, trim = TRUE, na.rm = FALSE)
@@ -107,7 +107,6 @@ rollVar(x, n = 9, trim = TRUE, unbiased = TRUE, na.rm = FALSE)
 
 
 \examples{
-## SOURCE("fBasics.A0-SPlusCompatibility")
 ## SOURCE("fMultivar.D3-RollingAnalysis")
 
 ## Rolling Analysis:

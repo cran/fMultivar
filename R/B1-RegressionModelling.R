@@ -31,13 +31,14 @@
 # FUNCTION:             REGRESSION MODELLING:
 #  .regXmp               Returns a regression example data set
 #  regFit                Wrapper Function for regression Models
-#  * lm                   Linear Regression Model
-#  * glm                  Generalized Linear Model
-#  * gam                  Generalized Additive Model
-#  * ppr                  Projection Pursuit Regression Model
-#  * mars                 Multivariate Adaptive Regression Spline
-#  * polymars             Polytochomous MARS
-#  * nnet                 Feedforward Neural Network Model
+#  .lmFit                 Linear Regression Model
+#  .glmFit                Generalized Linear Model
+#  .gamFit                Generalized Additive Model
+#  .pprFit                Projection Pursuit Regression Model
+#  .marsFit               Multivariate Adaptive Regression Spline Model
+#  .polymarsFit           Polytochomous MARS Model
+#   .pmars.ormula         Formula Generator for Polytochomous MARS Model
+#  .nnetFit               Feedforward Neural Network Model
 # S3-METHODS:           DESCRIPTION:
 #  print                 Prints results from a regression model fit     
 #  plot                  Plots fit and diagnostics for a regression model
@@ -165,7 +166,7 @@ function(model = c("LM2", "LOGIT2", "GAM2"), n = 1000)
 		X = data.frame(Y = p, X1 = x1, X2 = x2)
 	}
 	
-	if (odel == "GAM2") {	
+	if (model == "GAM2") {	
 		# GAM - Example Data:
 		x1 = rnorm(1000)
 		x2 = rnorm(1000)
@@ -225,117 +226,6 @@ nterms = NA, size = NA, title = NULL, description = NULL, ...)
     # Description:
     if (is.null(description)) description = as.character(date()) 
     
-    # Internal Function: lm
-    .lmFit = function (formula, data, ...)  { 
-        # From: R-package: base
-        # Fit:
-        fit = lm(formula = formula, data = data, ...)   
-        # Return Value:
-        fit$family = c("", "")
-        fit$parameters = as.vector(fit$coefficients)
-        fit }
-        
-    # Internal Function: glm
-    .glmFit = function (formula, family, data, ...) {
-        # From R-package: base
-        # Fit:
-        fit = glm(formula = formula, family = family, data = data, ...)         
-        # Return Value:
-        fit$family = c(family$family, family$link)
-        fit$parameters = as.vector(fit$coefficients)
-        fit }
-
-    # Internal Function: gam
-    .gamFit = function (formula, family, data, ...) {
-        # From R-package: mgcv  
-        # Fit:
-        fit = gam(formula = formula, family = family, data = data, ...)
-        # Return Value:
-        fit$family = c(family$family, family$link)
-        fit$parameters = as.vector(fit$coefficients)
-        fit }
-
-    # Internal Function: ppr
-    .pprFit = function (formula, data, nterms, ...) {
-        # From R package: modreg
-        if (is.na(nterms)) stop("Argument nterms must be specified")
-        # Fit:
-        fit = ppr(formula = formula, data = data, nterms = nterms, ...)     
-        # Return Value:
-        fit$family = c("", "")
-        fit$parameters = c(as.vector(fit$alpha), as.vector(fit$beta))   
-        fit }
-
-    # Internal Function: mars
-    # BuiltIn Uses: .BImars()
-    .marsFit = function(formula, data, ...) {
-        # From R-package: mda
-        # Settings:
-        m = match.call(expand = FALSE)
-        m$contrasts = m$... = NULL
-        m[[1]] = as.name("model.frame")
-        m = eval(m, parent.frame())
-        na.act = attr(m, "na.action")
-        Terms = attr(m, "terms")
-        attr(Terms, "intercept") = 0
-        X = model.matrix(Terms, m, contrasts)
-        Y = model.extract(m, response)
-        w = model.extract(m, weights)
-        if (length(w) ==  0) w = rep(1, nrow(X))
-        # Fit:
-        fit = .BImars(X, Y, w, ...)
-        fit$terms = Terms   
-        # Return Value:
-        fit$family = c("", "")
-        fit$parameters = as.vector(fit$coefficients)
-        fit }
-        
-    # Internal Function: polymars
-    # BuiltIn Uses: .BIpolymars
-    .polymarsFit = function (formula, data, ...) {
-        # From R-Package: polspline
-        # Fit:
-        pmars.formula =
-            function(formula, data = sys.parent(), gcv = 4.0, additive = FALSE,
-            knot.space = 3, tolerance = 1e-5, verbose = FALSE, ...) {
-            # A function implemented by Diethelm Wuertz
-            # Function:
-            m = match.call(expand = FALSE)
-            m$contrasts = m$... = NULL
-            m[[1]] = as.name("model.frame")
-            m = eval(m, parent.frame())
-            na.act = attr(m, "na.action")
-            Terms = attr(m, "terms")
-            attr(Terms, "intercept") = 0
-            X = model.matrix(Terms, m, contrasts)
-            Y = model.extract(m, response)
-            # fit is of class "polymars"
-            fit = .BIpolymars(responses = Y, predictors = X, gcv = gcv,
-                additive = additive, knot.space = knot.space, 
-                tolerance = tolerance, verbose = verbose, ...)
-            fit$terms = Terms
-            fit$contrasts = contrasts
-            fit$fitted.values = Y - fit$residuals
-            # Return Value:
-            fit }
-        fit = pmars.formula(formula = formula, data = data, ...)
-        # Return Value:
-        fit$family = c("", "")
-        fit$parameters = as.vector(fit$model$coefs)
-        fit }
-        
-    # Internal Function: nnet
-    .nnetFit = function (formula, data, size, ...) {
-        # From R-package: nnet
-        if (is.na(size)) stop("Argument size must be specified")
-        # Fit:
-        fit = nnet.formula(formula = formula, data = data, size = size, ...)    
-        # Return Value:
-        fit$formula = formula
-        fit$family = c("", "")
-        fit$parameters = as.vector(fit$wts)
-        fit }   
-    
     # Fit:
     fit = NULL
     
@@ -391,6 +281,195 @@ nterms = NA, size = NA, title = NULL, description = NULL, ...)
 # ------------------------------------------------------------------------------
 
 
+.lmFit = 
+function(formula, data, ...)  
+{ 
+    # From: R-package: base
+    
+    # Fit:
+    fit = lm(formula = formula, data = data, ...)   
+    
+    # Result:
+    fit$family = c("", "")
+    fit$parameters = as.vector(fit$coefficients)
+    
+    # Return Value:
+    fit 
+}
+  
+
+# ------------------------------------------------------------------------------
+  
+
+.glmFit = 
+function(formula, family, data, ...) 
+{
+    # From R-package: base
+    
+    # Fit:
+    fit = glm(formula = formula, family = family, data = data, ...)         
+    
+    # Result:
+    fit$family = c(family$family, family$link)
+    fit$parameters = as.vector(fit$coefficients)
+    
+    # Return Value:
+    fit 
+}
+
+
+# ------------------------------------------------------------------------------
+
+
+.gamFit = 
+function(formula, family, data, ...) 
+{
+    # From R-package: mgcv  
+    
+    # Fit:
+    fit = gam(formula = formula, family = family, data = data, ...)
+    
+    # Result:
+    fit$family = c(family$family, family$link)
+    fit$parameters = as.vector(fit$coefficients)
+    
+    # Return Value:
+    fit 
+}
+
+
+# ------------------------------------------------------------------------------
+
+
+.pprFit = 
+function(formula, data, nterms, ...) 
+{
+    # From R package: modreg
+    if (is.na(nterms)) stop("Argument nterms must be specified")
+    
+    # Fit:
+    fit = ppr(formula = formula, data = data, nterms = nterms, ...)     
+    
+    # Result:
+    fit$family = c("", "")
+    fit$parameters = c(as.vector(fit$alpha), as.vector(fit$beta))   
+    
+    # Return Value:
+    fit 
+}
+
+
+# ------------------------------------------------------------------------------
+
+
+.marsFit = 
+function(formula, data, ...) 
+{
+    # From R-package: mda
+    
+    # Settings:
+    m = match.call(expand = FALSE)
+    m$contrasts = m$... = NULL
+    m[[1]] = as.name("model.frame")
+    m = eval(m, parent.frame())
+    na.act = attr(m, "na.action")
+    Terms = attr(m, "terms")
+    attr(Terms, "intercept") = 0
+    X = model.matrix(Terms, m, contrasts)
+    Y = model.extract(m, response)
+    w = model.extract(m, weights)
+    if (length(w) ==  0) w = rep(1, nrow(X))
+    
+    # Fit:
+    fit = .BImars(X, Y, w, ...)
+    fit$terms = Terms   
+    
+    # Result:
+    fit$family = c("", "")
+    fit$parameters = as.vector(fit$coefficients)
+    
+    # Return Value:
+    fit 
+}
+
+
+# ------------------------------------------------------------------------------
+    
+
+.polymarsFit = 
+function (formula, data, ...) 
+{
+    # From R-Package: polspline
+    
+    # Fit:
+    fit = .pmars.formula(formula = formula, data = data, ...)
+    
+    # Result:
+    fit$family = c("", "")
+    fit$parameters = as.vector(fit$model$coefs)
+    
+    # Return Value:
+    fit 
+}
+
+
+# ------------------------------------------------------------------------------
+
+
+.pmars.formula =
+function(formula, data = sys.parent(), gcv = 4.0, additive = FALSE,
+knot.space = 3, tolerance = 1e-5, verbose = FALSE, ...) 
+{
+    # A function implemented by Diethelm Wuertz
+    
+    # Function:
+    m = match.call(expand = FALSE)
+    m$contrasts = m$... = NULL
+    m[[1]] = as.name("model.frame")
+    m = eval(m, parent.frame())
+    na.act = attr(m, "na.action")
+    Terms = attr(m, "terms")
+    attr(Terms, "intercept") = 0
+    X = model.matrix(Terms, m, contrasts)
+    Y = model.extract(m, response)
+    # fit is of class "polymars"
+    fit = .BIpolymars(responses = Y, predictors = X, gcv = gcv,
+        additive = additive, knot.space = knot.space, 
+        tolerance = tolerance, verbose = verbose, ...)
+    fit$terms = Terms
+    fit$contrasts = contrasts
+    fit$fitted.values = Y - fit$residuals
+    
+    # Return Value:
+    fit 
+}
+
+
+# ------------------------------------------------------------------------------
+    
+
+.nnetFit = 
+function (formula, data, size, ...) 
+{
+    # From R-package: nnet
+    if (is.na(size)) stop("Argument size must be specified")
+    
+    # Fit:
+    fit = nnet.formula(formula = formula, data = data, size = size, ...)    
+    
+    # Result:
+    fit$formula = formula
+    fit$family = c("", "")
+    fit$parameters = as.vector(fit$wts)
+    
+    # Return Value:
+    fit 
+}   
+
+
+# ------------------------------------------------------------------------------
+
+
 print.fREG = 
 function(x, ...)
 {   # A function implemented by Diethelm Wuertz
@@ -430,39 +509,47 @@ function(x, ...)
         # Regression Model LM:
         if (object@method == "LM") {
             print.default(format(object@fit$coef, digits = digits), 
-                print.gap = 2, quote = FALSE) }
+                print.gap = 2, quote = FALSE) 
+        }
         
         # Regression Model GLM:
         if (object@method == "GLM") {
             if (length(object@fit$coef)) {
-            if (is.character(co = object@fit$contrasts)) 
+            	if (is.character(co = object@fit$contrasts)) 
                 cat("  [contrasts: ", apply(cbind(names(co), co), 
                     1, paste, collapse = "="), "]")
                 # cat(":\n")
                 print.default(format(object@fit$coefficients,
-                    digits = digits), print.gap = 2, quote = FALSE)}
-            else { cat("No coefficients\n\n") } }   
+                    digits = digits), print.gap = 2, quote = FALSE)
+            } else { 
+	            cat("No coefficients\n\n") 
+	        } 
+        }   
         
         # Regression Model GAM:
         if (object@method == "GAM") {
             print.default(format(object@fit$coef, digits = digits), 
-                print.gap = 2, quote = FALSE) }     
+                print.gap = 2, quote = FALSE) 
+        }     
         
         # Regression Model PPR:
         if (object@method == "PPR") {
             cat("-- Projection Direction Vectors --\n")
             print(object@fit$alpha)
             cat("-- Coefficients of Ridge Terms --\n")
-            print(object@fit$beta) }    
+            print(object@fit$beta) 
+        }    
         
         # Regression Model MARS:
         if (object@method == "MARS") {      
             Parameters = round(object@fit$parameters, digits = digits)      
-            print(data.frame(Parameters)) }             
+            print(data.frame(Parameters)) 
+        }             
         
         # Regression Model POLYMARS:
         if (object@method == "POLYMARS") {
-            print(object@fit$model) }  
+            print(object@fit$model) 
+        }  
         
         # Regression Model NNET:
         if (object@method == "NNET") {
@@ -484,7 +571,8 @@ function(x, ...)
                 cat(" decay=", object@fit$decay[1], sep="")
             cat("\n")
             Weights = object@fit$wts
-            print(Weights) } 
+            print(Weights) 
+    	} 
         
     # Residual Variance:
     # cat("\nResidual Variance:\n", var(object@fit$residuals))
@@ -495,7 +583,7 @@ function(x, ...)
 }            
     
 
-# ------------------------------------------------------------------------------
+# ******************************************************************************
 
 
 plot.fREG = 
@@ -533,7 +621,7 @@ function(x, y, ...)
 }      
 
 
-# ------------------------------------------------------------------------------
+# ******************************************************************************
 
 
 summary.fREG =       
@@ -556,7 +644,9 @@ function(object, ...)
     cat("\n\n")
 
     # Internal Function: fResiduals
-    fResiduals = function(x, digits) {
+    fResiduals = 
+    function(x, digits) 
+    {
         cat("Non-Weighted Residuals:\n")
         names = c("Min", "1Q", "Median", "3Q", "Max")
         rq = structure(quantile(x), names = names)
@@ -569,10 +659,13 @@ function(object, ...)
         print(rq, digits = digits) 
         print("done")
         cat("\n") 
-        invisible() }
+        invisible() 
+    }
         
     # Internal Function: print.summary.LM
-    print.summary.LM = function (x, ...) {
+    print.summary.LM = 
+    function (x, ...) 
+    {
         digits = max(4, getOption("digits") - 4)
         symbolic.cor = x$symbolic.cor
         signif.stars = getOption("show.signif.stars")
@@ -595,14 +688,17 @@ function(object, ...)
             print(resid, digits = digits, ...)
         } else {
             cat("ALL", df[1], "residuals are 0: no residual ",
-                "degrees of freedom!\n") }
+                "degrees of freedom!\n") 
+        }
         if (length(x$aliased) == 0) {
             cat("\nNo Coefficients\n") 
         } else {
-            if (nsingular<-df[3] - df[1]) 
+            if (nsingular<-df[3] - df[1]) {
                 cat("\nCoefficients: (", nsingular, " not defined ",
                     "because of singularities)\n", sep = "")
-            else cat("\nCoefficients:\n")
+        	} else {
+	        	cat("\nCoefficients:\n")
+        	}
             coefs = x$coefficients
             if (!is.null(aliased = x$aliased) && any(x$aliased)) {
                 cn = names(aliased)
@@ -611,7 +707,8 @@ function(object, ...)
                 coefs[!aliased, ] = x$coefficients 
             }
             printCoefmat(coefs, digits = digits, signif.stars = 
-                signif.stars, na.print = "NA", ...) }
+                signif.stars, na.print = "NA", ...) 
+        }
         cat("\nResidual standard error:", format(signif(x$sigma, 
             digits)), "on", rdf, "degrees of freedom\n")
         if (!is.null(x$fstatistic)) {
@@ -637,10 +734,13 @@ function(object, ...)
                     correl[!lower.tri(correl)] = ""
                     print(correl[-1, -p, drop = FALSE], quote = FALSE) }} }
         cat("\n")
-        invisible() }
+        invisible() 
+    }
         
     # Internal Function: print.summary.GLM
-    print.summary.GLM = function (x, ...) {
+    print.summary.GLM = 
+    function (x, ...) 
+    {
         digits = max(4, getOption("digits") - 4)
         symbolic.cor = x$symbolic.cor
         signif.stars = getOption("show.signif.stars")
@@ -694,10 +794,13 @@ function(object, ...)
                     correl[!lower.tri(correl)] = ""
                     print(correl[-1, -p, drop = FALSE], quote = FALSE) }}}
         cat("\n")
-        invisible() }
+        invisible() 
+    }
 
     # Internal Function: print.summary.GAM
-    print.summary.GAM = function(x, ...) { 
+    print.summary.GAM = 
+    function(x, ...) 
+    { 
         if (length(x$p.coeff) > 0) {
             cat("Parametric coefficients:\n")
             width = max(nchar(names(x$p.coeff)))
@@ -723,15 +826,15 @@ function(object, ...)
         cat("\nR-sq.(adj) = ", formatC(x$r.sq, digits = 3, width = 5),
             "   Deviance explained = ", formatC(x$dev.expl*100, 
             digits = 3, width = 4), "%", sep = "")
-        if (is.null(x$ubre)) 
-            cat("\nGCV score = ", formatC(x$gcv, digits = 5), " ", 
-                sep = "")
-        else 
-            cat("\nUBRE score = ", formatC(x$ubre, digits = 5), 
-                sep = "")
+        if (is.null(x$ubre)) {
+            cat("\nGCV score = ", formatC(x$gcv, digits = 5), " ", sep = "")
+    	} else {
+            cat("\nUBRE score = ", formatC(x$ubre, digits = 5), sep = "")
+        }
         cat("  Scale est. = ", formatC(x$scale, digits = 5, 
             width = 8, flag = "-"), "  n = ", x$n, "\n", sep = "") 
-        invisible() }           
+        invisible() 
+    }           
 
     # Fit:
     fit = object@fit 
@@ -740,25 +843,29 @@ function(object, ...)
     if (object@method == "LM") {
         class(fit) = "lm"
         ans = summary.lm(object = fit, ...)
-        print.summary.LM(x = ans, ...) }    
+        print.summary.LM(x = ans, ...) 
+    }    
     
     # Regression Model: GLM
     if (object@method == "GLM") {
         class(fit) = c("glm", "lm")
         ans = summary.glm(object = fit, ...)
-        print.summary.GLM(x = ans, ...) }   
+        print.summary.GLM(x = ans, ...) 
+    }   
     
     # Regression Model: GAM
     if (object@method == "GAM") {
         class(fit) = "gam"
         ans = summary.gam(object = fit, ...)
-        print.summary.GAM(x = ans, ...) }   
+        print.summary.GAM(x = ans, ...) 
+    }   
     
     # Regression Model: GAM
     if (object@method == "GAM") {
         class(fit) = "gam"
         ans = summary.gam(object = fit, ...)
-        print.summary.GAM(x = ans, ...) }
+        print.summary.GAM(x = ans, ...) 
+    }
         
     # Regression Model: PPR
     if (object@method == "PPR") {
@@ -772,12 +879,13 @@ function(object, ...)
             cat("\nEquivalent df for ridge terms:\n")
             edf = fit$edf
             names(edf) = paste("term", 1:fit$mu)
-            print(round(edf, 2), ...)} }        
+            print(round(edf, 2), ...)} 
+    }        
                 
     # Regression Model: MARS
     if (object@method == "MARS") {
         # Use the print Method 
-        } 
+    } 
             
     # Regression Model: POLYMARS
     if (object@method == "POLYMARS") {
@@ -789,12 +897,13 @@ function(object, ...)
             cat("\nResponses:", fit$responses, "\n")
         if(!is.null(fit$Rsquared))
             cat("\nRsquared:",round(fit$Rsquared, 4),"\n") 
-        cat("\n") }
+        cat("\n") 
+    }
         
     # Regression Model: NNET
     if (object@method == "NNET") {
         # Use the print Method
-        }       
+    }       
 
     # Return Value:
     invisible() 
@@ -820,36 +929,43 @@ function(object, newdata, type = "response", ...)
     if (object@method == "LM") {
         class(fit) = "lm"
         ans = predict(object = fit, newdata = newdata, 
-            se.fit = TRUE, type = type, ...) }
+            se.fit = TRUE, type = type, ...) 
+    }
             
     # Regression Model: GLM
     if (object@method == "GLM") {
         class(fit) = c("glm", "lm")
         ans = predict(object = fit, newdata = newdata, 
-            se.fit = TRUE, type = type, ...) }
+            se.fit = TRUE, type = type, ...) 
+    }
             
     # Regression Model: GAM
     if (object@method == "GAM") {
         class(fit) = "gam"
         ans = predict(object = fit, newdata = newdata, 
-            se.fit = TRUE, type = type, ...) }  
+            se.fit = TRUE, type = type, ...) 
+    }  
                 
     # Regression Model: PPR
     if (object@method == "PPR") {
         class(fit) = "ppr"
         ans = NULL
-        ans$fit = predict(object = fit, newdata = newdata, ...) }
+        ans$fit = predict(object = fit, newdata = newdata, ...) 
+    }
             
     # Regression Model: MARS
     # BuitIn Uses: .predict.BImars()
     if (object@method == "MARS") {
-        ans = .predict.BImars(object = fit, newdata, ...) }
+        ans = .predict.BImars(object = fit, newdata, ...) 
+    }
         
     # Regression Model: POLYMARS
     # BuitIn Uses: .predict.BIpolymars()
     if (object@method == "POLYMARS") {
         # type not used
-        predict.POLYMARS = function (object, newdata, ...) {
+        predict.POLYMARS = 
+        function (object, newdata, ...) 
+        {
             # Settings:
             classify = FALSE
             intercept = TRUE    
@@ -865,16 +981,19 @@ function(object, newdata, type = "response", ...)
             result = .predict.BIpolymars(object = object, x = X,
                 classify = classify, intercept = intercept, ...)
             # Return Value:
-            as.vector(result) } 
+            as.vector(result) 
+        } 
         ans = NULL
-        ans$fit = .predict.BIpolymars(object = fit, newdata, ...) }    
+        ans$fit = .predict.BIpolymars(object = fit, newdata, ...) 
+    }    
         
     # Regression Model: NNET
     if (object@method == "NNET") {
         if (type == "response") type = "raw"
         class(fit) = c("nnet.formula", "nnet")
         ans = NULL
-        ans$fit = predict(object = fit, newdata, type = type, ...) }        
+        ans$fit = predict(object = fit, newdata, type = type, ...) 
+    }        
             
     # Return Value:
     ans$fit = as.vector(ans$fit)
@@ -1156,46 +1275,64 @@ trace.mars = FALSE, forward.step = TRUE, prevfit = NULL, ...)
 
 
 .predict.BImars = 
-function (object, newdata, ...) 
+function(object, newdata, ...) 
 {   
     # Internal Function:
-    model.matrix.BImars = 
-    function (object, x, which = object$selected.terms, full = FALSE, ...) {
-        if (missing(x)) return(object$x)
-        x = as.matrix(x)
-        dd = dim(x)
-        n = dd[1]
-        p = dd[2]
-        nterms = length(which)
-        dir = object$factor
-        cut = object$cuts
-        if (full) {
-            bx = matrix(0, nrow = n, ncol = object$lenb)
-            bx[, 1] = 1 }
-        else bx = matrix(1, nrow = n, ncol = nterms)
-        which = which[-1]
-        for (i in seq(along = which)) {
-            j = which[i]
-            if (all(dir[j, ] == 0)) { stop("error in factor or which") }
-            temp1 = 1
-            for (k in 1:p) {
-                if (dir[j, k] != 0) {
-                    temp2 = dir[j, k] * (x[, k] - cut[j, k])
-                    temp1 = temp1 * temp2 * (temp2 > 0) } }
-            if (full) bx[, j] = temp1
-            else bx[, i + 1] = temp1}
-        bx }
+    
         
     # Remove Response from Data:
-    newdata = model.matrix.BImars(delete.response(terms(object)), newdata) 
+    newdata = .model.matrix.BImars(delete.response(terms(object)), newdata) 
     
     # Predict:
-    result = model.matrix.BImars(object = object, x = newdata, 
+    result = .model.matrix.BImars(object = object, x = newdata, 
         which = object$selected.terms, full = FALSE) %*% 
         object$coefficients
         
     # Return Value:
     list(fit = as.vector(result)) 
+}
+
+
+# ------------------------------------------------------------------------------
+
+
+.model.matrix.BImars = 
+function(object, x, which = object$selected.terms, full = FALSE, ...) 
+{
+    if (missing(x)) return(object$x)
+    x = as.matrix(x)
+    dd = dim(x)
+    n = dd[1]
+    p = dd[2]
+    nterms = length(which)
+    dir = object$factor
+    cut = object$cuts
+    
+    if (full) {
+        bx = matrix(0, nrow = n, ncol = object$lenb)
+        bx[, 1] = 1 
+    } else {
+	    bx = matrix(1, nrow = n, ncol = nterms)
+    }
+    
+    which = which[-1]
+    for (i in seq(along = which)) {
+        j = which[i]
+        if (all(dir[j, ] == 0)) { stop("error in factor or which") }
+        temp1 = 1
+        for (k in 1:p) {
+            if (dir[j, k] != 0) {
+                temp2 = dir[j, k] * (x[, k] - cut[j, k])
+                temp1 = temp1 * temp2 * (temp2 > 0) 
+            } 
+        }
+        if (full) {
+	        bx[, j] = temp1
+    	} else {
+	    	bx[, i + 1] = temp1
+    	}
+    }
+    bx 
 }
 
 
@@ -1837,28 +1974,33 @@ function(object, x, classify = FALSE, intercept,...)
     #           Can also be givebn a numerical value
     
     # Internal Function added by DW:
-    
-    unstrip = function(x) {
+    unstrip = 
+    function(x) 
+    {
 		dd = dim(x)
         y = x
-        if (length(dd)==2){
+        if (length(dd) == 2) {
             dd2 = dd[2]
             if (dd2==1) y<- c(x[,1])
             if (dd2==2) y<- cbind(c(x[,1]),c(x[,2]))
             if (dd2>2) y<- cbind(c(x[,1]),c(x[,2]),c(x[,3]))
             if (dd2>3)for (i in 4:dd2) y = cbind(y,c(x[,i]))
-            y }
-        if (length(dd)==1 || length(dd)==0){
+            y 
+        }
+        if (length(dd) == 1 || length(dd) == 0) {
             y = c(unlist(c(unlist(x))))
-            names(y) = NULL }
-        y }
+            names(y) = NULL 
+        }
+        y 
+    }
  
-    if (missing(intercept)) { intercept<-TRUE }
-    if (!missing(x))x = unstrip(x)
+    if (missing(intercept)) intercept = TRUE
+    if (!missing(x)) x = unstrip(x)
     
     # Some error checking:
     
-    if (class(object)!="polymars") stop("object is not a polymars object")
+    ## if (class(object)!="polymars") stop("object is not a polymars object")
+    ## DW
     pmars.model = object
     
     # The x matrix number of columns can be of length equal to the 
@@ -1866,16 +2008,20 @@ function(object, x, classify = FALSE, intercept,...)
     # number of predictors in the model in `pmars.model'
     
     if (!(is.matrix(x)))  {
-    if (length(unique(pmars.model$model[, "pred1"]))== 1 ||  
-        ncol(pmars.model$ranges.and.medians)== 1  ) {
-        x<-matrix(data=x,ncol=1) } }
+	    if (length(unique(pmars.model$model[, "pred1"]))== 1 ||  
+	        ncol(pmars.model$ranges.and.medians) == 1  ) {
+	        x = matrix(data = x, ncol = 1) 
+	    } 
+    }
     if ((is.matrix(x) && ncol(x) 
         != length(unique(pmars.model$model[,"pred1"])))) {
-    if (ncol(x) != ncol(pmars.model$ranges.and.medians)) {    
-        stop(paste(
-            "Input should be a matrix with number of columns",
-            " equal to either number of original predictors or",
-            " number of predictors in model\n")) } }
+	    if (ncol(x) != ncol(pmars.model$ranges.and.medians)) {    
+	        stop(paste(
+	            "Input should be a matrix with number of columns",
+	            " equal to either number of original predictors or",
+	            " number of predictors in model\n")) 
+	    } 
+    }
     
     # If the number of columns of the matrix is not length equal to 
     # number of predictors it is expanded to that size.
@@ -1883,93 +2029,105 @@ function(object, x, classify = FALSE, intercept,...)
     if (is.matrix(x) && ncol(x) == 
         length(unique(pmars.model$model[, "pred1"])) && 
         ncol(x) != ncol(pmars.model$ranges.and.medians)) {
-            tempmatrix<-x
-    
-    x<-matrix(nrow=nrow(tempmatrix), 
-        ncol=ncol(pmars.model$ranges.and.medians),data = 0)
-    for (i in 1:length(unique(pmars.model$model[, "pred1"])))  {
-     for (j in 1:nrow(tempmatrix)) {
-       x[j,sort(unique(pmars.model$model[,"pred1"]))[i]]<-x[j] } } }
+        tempmatrix = x 
+	    x = matrix(nrow = nrow(tempmatrix), 
+	        ncol=ncol(pmars.model$ranges.and.medians),data = 0)
+	    for (i in 1:length(unique(pmars.model$model[, "pred1"])))  {
+	     	for (j in 1:nrow(tempmatrix)) {
+	       		x[j,sort(unique(pmars.model$model[,"pred1"]))[i]]<-x[j] 
+	        } 
+	    } 
+    }
        
     # If x is a vector put it into matrix form expanding it if it is  
     # of length equal to only the number of predictors in the model 
     # in `pmars.model'
     
     if (!(is.matrix(x))) {
-    if (!(length(x) == ncol(pmars.model$ranges.and.medians) || 
-        length(x) == unique(pmars.model$model[, "pred1"]))) {
-        stop(paste(
-            "The vector of values must be equal in length to",
-            "  either the number of original predictors or",
-            " predictors in the model\n") ) }
+    	if (!(length(x) == ncol(pmars.model$ranges.and.medians) || 
+	        length(x) == unique(pmars.model$model[, "pred1"]))) {
+	        stop(paste(
+	            "The vector of values must be equal in length to",
+	            "  either the number of original predictors or",
+	            " predictors in the model\n") ) 
+        }
         if (length(x) == unique(pmars.model$model[, "pred1"]) && 
             length(x) != ncol(pmars.model$ranges.and.medians)) {
             x = rep(0, ncol(pmars.model$ranges.and.medians))
             for (i in 1:length(unique(pmars.model$model[, "pred1"]))) {
-                x[sort(unique(pmars.model$model[, "pred1"]))[i]]<-x[i] } }
-                x = t(as.matrix(x)) }
+                x[sort(unique(pmars.model$model[, "pred1"]))[i]]<-x[i] 
+            } 
+        }
+        x = t(as.matrix(x)) 
+    }
  
     # Checking to see if there are factor variables in the model
     
     if (dimnames(pmars.model$model)[[2]][3] == "level1") {
-        level1<-TRUE
-        pmars.model$model<-pmars.model$model[,c(1:(5+pmars.model$responses))]
-
-    # if(dimnames(pmars.model$model)[[2]][6] == 
-    # "level2"){level2<-TRUE}else{level2<-FALSE}
-    
+        level1 = TRUE
+        pmars.model$model = pmars.model$model[,c(1:(5+pmars.model$responses))]
+    	# if(dimnames(pmars.model$model)[[2]][6] == 
+    	# "level2"){level2<-TRUE}else{level2<-FALSE}
     } else {
-       level1 <- FALSE
+       level1 = FALSE
        pmars.model$model = pmars.model$model[, c(1:(4+pmars.model$responses))]
-   
-    # if(dimnames(pmars.model$model)[[2]][5] == "level2")
-    # {level2<-TRUE}else{level2<-FALSE}
-   
+       # if(dimnames(pmars.model$model)[[2]][5] == "level2")
+       # {level2<-TRUE}else{level2<-FALSE}
     }
     
     # Setting up the fitted responses matrix
-    
-    responses<-pmars.model$responses
+    responses = pmars.model$responses
     Y = matrix(ncol = responses, nrow = nrow(x), data = rep(0, nrow(x)))
     Y1 = matrix(ncol = 1, nrow = nrow(x), data = rep(0, nrow(x)))
     Y2 = matrix(ncol = 1, nrow = nrow(x), data = rep(0, nrow(x)))
     if (is.logical(intercept)){
         if (intercept == TRUE) {
             for (i in 1:responses)Y[,i] = 
-            pmars.model$model[1,ncol(pmars.model$model)-responses+i] }
-    else {
+            	pmars.model$model[1,ncol(pmars.model$model)-responses+i] 
+        } else {
         if (intercept == FALSE) {
-            for (i in 1:responses)Y[,i] = 0.0 } } }
-	else {
-	   if (is.numeric(intercept)) {
-	     if (length(intercept)==responses) {
-	       for (i in 1:responses)Y[,i] = intercept[i] }
-	     else {
-	       if (length(intercept) != 1) {
-	                stop("Intercept arguement mispecified \n") }
-	       for (i in 1:responses)Y[,i] = intercept } } }
+            for (i in 1:responses)Y[,i] = 0.0 } 
+        } 
+	} else {
+		if (is.numeric(intercept)) {
+	     	if (length(intercept)==responses) {
+	       		for (i in 1:responses)Y[,i] = intercept[i] 
+	       	} else {
+		       	if (length(intercept) != 1) {
+					stop("Intercept arguement mispecified \n") 
+				}
+		       	for (i in 1:responses)Y[,i] = intercept 
+	       	} 
+	    } 
+	}
        
     # Computing fitted values
     
 	if (pmars.model$model.size>1) {
-	   for (i in 2:pmars.model$model.size)  { 
-	     Y2[] = 1   
-	     Y1[] = x[,pmars.model$model[i, "pred1"]]
-	     if (!is.na(pmars.model$model[i, "knot1"])) {
-	       Y1 = Y1 - pmars.model$model[i,"knot1"]
-	       Y1[Y1 < 0,] = 0 }
-	     if (level1) {
-	     if (!is.na(pmars.model$model[i, "level1"])){
-	       Y1<- (Y1 == pmars.model$model[i, "level1"]) } }
-	   if (!is.na(pmars.model$model[i, "pred2"]) & 
-	    pmars.model$model[i, "pred2"] != 0)  {
-	     Y2[] = x[,pmars.model$model[i,"pred2"]]
-	     if (!is.na(pmars.model$model[i,"knot2" ]))  {
-	       Y2 = Y2 - pmars.model$model[i,"knot2"]
-	       Y2[Y2 < 0,] = 0 } }
-	   
-    for (j in 1:responses){Y[,j]<-Y[,j]+(Y1 * Y2 * 
-        pmars.model$model[i,ncol(pmars.model$model)-responses+j])} } }
+		for (i in 2:pmars.model$model.size)  { 
+			Y2[] = 1   
+		    Y1[] = x[, pmars.model$model[i, "pred1"]]
+		    if (!is.na(pmars.model$model[i, "knot1"])) {
+		       	Y1 = Y1 - pmars.model$model[i,"knot1"]
+		       	Y1[Y1 < 0,] = 0 
+		    }
+		    if (level1) {
+				if (!is.na(pmars.model$model[i, "level1"])){
+			       	Y1 = (Y1 == pmars.model$model[i, "level1"]) 
+			    } 
+		    }
+		   	if (!is.na(pmars.model$model[i, "pred2"]) & 
+		    	pmars.model$model[i, "pred2"] != 0)  {
+		     	Y2[] = x[,pmars.model$model[i, "pred2"]]
+		     	if (!is.na(pmars.model$model[i, "knot2" ]))  {
+		       		Y2 = Y2 - pmars.model$model[i, "knot2"]
+		       		Y2[Y2 < 0, ] = 0 
+		       	} 
+		    }
+	    	for (j in 1:responses){Y[,j] <- Y[,j]+(Y1 * Y2 * 
+	        	pmars.model$model[i,ncol(pmars.model$model)-responses+j])} 
+       	} 
+    }
         
 	# If classification is to be used the original polymars fitting 
 	# expanded the response into a vector of indicator variables. The 
@@ -1977,14 +2135,17 @@ function(object, x, classify = FALSE, intercept,...)
 	# each case.
 	
 	if (classify == TRUE) {
-   	for (i in 1:nrow(Y)) {
-     	Y[i,]<-Y[i,]==max(Y[i,]) }
-   	if (is.matrix(pmars.model$conversion))
-   	Z<-Y
-   	Y<-matrix(ncol=1,nrow=nrow(Z))
-   	for (i in 1:nrow(Y)) {
-     	for (j in 1:ncol(Z)) {  
-       if (Z[i,j] == 1) Y[i,] = pmars.model$conversion[j] } }}
+	   	for (i in 1:nrow(Y)) {
+	     	Y[i,] <- Y[i, ] == max(Y[i,]) 
+	    }
+	   	if (is.matrix(pmars.model$conversion))
+	   		Z = Y
+	   		Y = matrix(ncol = 1, nrow = nrow(Z))
+	   	for (i in 1:nrow(Y)) {
+	     	for (j in 1:ncol(Z)) {  
+	       	if (Z[i,j] == 1) Y[i, ] = pmars.model$conversion[j] } 
+	    }
+    }
         
     # Return Value:
     return(Y)
@@ -2009,9 +2170,9 @@ function(object,...)
     cat("\n\nModel produced\n\n")
     print(pmars.model$model)
     if (pmars.model$responses != 1)
-            cat("\nRESPONSES :", pmars.model$responses, "\n")
+		cat("\nRESPONSES :", pmars.model$responses, "\n")
     if (!is.null(pmars.model$Rsquared))
-            cat("\nRsquared :",round(pmars.model$Rsquared,3),"\n")
+		cat("\nRsquared :", round(pmars.model$Rsquared, 3), "\n")
             
     # Return Value:
     invisible()
@@ -2087,7 +2248,8 @@ function(x, ...)
 # ------------------------------------------------------------------------------
 
     
-summary.OLS = function(object, ...) 
+summary.OLS = 
+function(object, ...) 
 {   # A function implemented by Diethelm Wuertz
 
     # Description:

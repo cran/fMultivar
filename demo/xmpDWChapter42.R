@@ -1,33 +1,41 @@
-
 #
-# Example: 
-#	Regression Modelling of US Recession
+# Examples from the forthcoming Monograph:
+# 	Rmetrics - Financial Engineering and Computational Finance
+#   written by Diethelm Wuertz
+#   ISBN to be published
 #
-# Description:
-#	This example shows how to model US Recession by several 
-#   regression models
+# Details:
+#   Chapter 4.2
+#   Modelling and Forecasting with Neural Networks:
+#
+# List of Examples, Exercises and Code Snippets:
+# 
+#	Example: 1 Build Data Set for 6 Months US Regression Modelling  
+#   Example: 2 Fit Regression Models
+#
+#   *** This list is not yet complete ***
 #
 # Author:
-#	(C) 2002, Diethelm Wuertz, GPL
+#	(C) 2002-2005, Diethelm Wuertz, GPL
+# 	  www.rmetrics.org
+# 	  www.itp.phys.ethz.ch
+# 	  www.finance.ch
 #
 
 
 ################################################################################
-# Read the Dataset from File:
-	
 
+		
+### Example: 1 Build Data Set for 6 Months US Regression Modelling
+	
+	# Read the Dataset from File:
 	# Column 1: Date - CCYYMM
 	# Column 2: Recession 0 | 1
 	# Column 3: 3 Month Treasury Bills
 	# Column 4: 10 Years Treasury Bonds
 	data(recession)
 	###
-
-
-################################################################################		
-# Build the Data Set for 6 Months Regression Predictions:	
 	
-
 	horizon = 6
 	n = length(recession[, 1])
 	# Response and Predictors:
@@ -45,11 +53,15 @@
 	###
 
 	
-################################################################################
-# Fit Regression Models:
+# ------------------------------------------------------------------------------
 
+
+### Example: 2 Fit Regression Models
 
 	family = binomial(link = probit)
+	lm.fit = regFit(response ~ predictor1 + predictor2, 
+	  data = data, method = "LM")
+	  print(glm.fit)
 	glm.fit = regFit(response ~ predictor1 + predictor2, 
 	  family = family, data = data, method = "GLM")
 	  print(glm.fit)
@@ -66,16 +78,15 @@
 	  data = data, method = "POLYMARS")
 	  print(polymars.fit)
 	nnet.fit = regFit(response ~ predictor1 + predictor2, data = data, 
-	  method = "NNET", linout = TRUE, trace = FALSE, maxit = 1000, 
-	  size = 6)
+	  method = "NNET", linout = TRUE, trace = FALSE, maxit = 1000, size = 6)
 	  print(nnet.fit)
 	###
 	
 	# Write Plot Function:
 	myPlot = function(time, response, in.sample, StockWatson, title) {
-	  plot(time, response, type = "n", main = title, col = "steelblue3")
+	  plot(time, response, type = "n", main = title, col = "steelblue")
 	  grid()
-	  lines(time, response, type = "h", col = "steelblue3")
+	  lines(time, response, type = "h", col = "steelblue")
 	  # The Benchmark - Compare with StockWatson:
 	  lines(time, StockWatson, col = "red", lty = 3)
 	  # Set Negative Values to Zero:
@@ -87,7 +98,7 @@
 	###
 		
 	# Compare with Fitted Values:
-	par(mfrow = c(3, 2), cex = 0.6)
+	par(mfrow = c(3, 2), cex = 0.7)
 	myPlot(time, response, 
 	  glm.fit@fit$fitted.values, StockWatson, "GLM")
 	myPlot(time, response, 

@@ -1,26 +1,38 @@
-
 #
-# Example:
-#   Matrix arithmetics and linear algebra within R
+# Examples from the forthcoming Monograph:
+# 	Rmetrics - Financial Engineering and Computational Finance
+#   written by Diethelm Wuertz
+#   ISBN to be published
 #
-# Description:
-#   This example introduces you to the basics of matrix arithmetics
-#   and linear algebra within R. The topics we cover include:
-#   1 Overview of Acvailable Functions
-#   2 Generation of Matrices
-#   3 Matrices and Linear Algebra
-#   4 Basic Statistics
-#   5 Manage Missing Values
-#   6 Column and Row Vectors
+# Details:
+#   Chapter 4.6
+#   Matrix and Linear Algebra Addon:
+#
+# List of Examples, Exercises and Code Snippets:
+#	    
+# 	Example: 1 Overview of Acvailable Functions
+#	Example: 2 Generation of Matrices
+#	Example: 3 Matrices and Linear Algebra
+#   Example: 4 Basic Statistics
+#	Example: 5 Column and Row Vectors
+#   Example: 6 Stack Operations and Matrix Products
+#   Example: 7 Missing Values in a Data Matrix 
+#
+#   *** This list is not yet complete ***
+#
 #
 # Author:
-#   (C) 2004, Diethelm Wuertz, GPL
+#	(C) 2002-2005, Diethelm Wuertz, GPL
+# 	  www.rmetrics.org
+# 	  www.itp.phys.ethz.ch
+# 	  www.finance.ch
 #
 
-    
-################################################################################
-# 1 Overview of Acvailable Functions:
 
+################################################################################
+
+
+### Example: 1 Overview of Available Functions
 
     # GENERATION:           DESCRIPTION:
     #  matrix               R  creates a matrix from the given set of values
@@ -35,6 +47,7 @@
     #  dimnames             R  retrieves or sets the dimnames of an object
     #  colnames|rownames    R  retrieves or sets the row or column names 
     #  colIds|rowIds        S  ... use alternatively
+    ###
     
     # SUBSETS:              DESCRIPTION:
     #  dim                  R  returns the dimension of a matrix object
@@ -46,6 +59,7 @@
     #   (Lops)              R  Elementwise logical Ops: > < >= <= == !=
     #  cbind|rbind          R  augments a matrix object by columns|rows
     #  na.omit              R  removes NA from a matrix object
+    ###
     
     # BASIC STATISTICS:     DESCRIPTION:
     #  var                     returns the variance matrix
@@ -58,6 +72,7 @@
     #   col|rowSkewness *      calculates column|row skewness 
     #   col|rowKurtosis *      calculates column|row kurtosis 
     #   col|rowCumsums *       calculates column|row cumulated sums 
+    ###
     
     # LINEAR ALGEBRA:       DESCRIPTION:
     #  det                     returns the determinante of a matrix
@@ -68,6 +83,7 @@
     #  %x%|kron           R|S  returns the Kronecker product
     #  t                    R  returns the transposed matrix
     #  inv|chol2inv *          returns the inverse of a matrix
+    ###
     
     # MORE LINEAR ALGEBRA:  DESCRIPTION:
     #  chol                 R  returns the Cholesky factor matrix
@@ -78,11 +94,13 @@
     #  solve                R  solves a system of linear equations
     #  backsolve            R  ... use when the matrix is upper triangular
     #  forwardsolve         R  ... use when the matrix is lower triangular
+	###
+	
+
+# ------------------------------------------------------------------------------
 
 
-################################################################################
-# 2 Generation of Matrices:
-
+### Example: 2 Generation of Matrices
 
     # matrix -
     # Create Matrixes from Scratch:
@@ -119,9 +137,10 @@
     ###
     
    
-################################################################################
-# 3 Matrices and Linear Algebra:
+# ------------------------------------------------------------------------------
 
+
+### Example: 3 Matrices and Linear Algebra
 
     # Add/Subtract/Multiply/Divide a Constant or Matrix:  
     X + 3                          # adds a constant to a matrix
@@ -198,10 +217,10 @@
     forwardsolve(L)                # ... use when the matrix is upper triangular
     ###
    
-    
-################################################################################
-# 4 Basic Statistics:
+# ------------------------------------------------------------------------------
 
+
+### Example: 4 Basic Statistics
 
     # Create matrix:
     ts = matrix(rnorm(100), 50)
@@ -214,18 +233,12 @@
     colMeans(ts)
     ###
  
-       
-################################################################################
-# 5 Manage Missing Values:
+
+# ------------------------------------------------------------------------------
 
 
-    # see the example file "xmpMarixAddinNA.R"
-
-
-################################################################################
-# 6 Column and Row Vectors:
-
-    
+### Example: 5 Column and Row Vectors
+   
     # Define and use vectors:
     u = c(3, 1, 4)
     v = c(2, 0, -1)   
@@ -247,5 +260,114 @@
     ###
     
     
+# ------------------------------------------------------------------------------
+
+
+### Example: 6 Stack Operations and Matrix Products
+
+	# Show, that the following relation holds:
+	# vec ( A %*% B %*% C ) = ( t(C) %x% A ) %*% vec(B)
+	###
+	
+	# Three random Matrixes:
+	A = matrix(rnorm(9), 3)
+	B = matrix(rnorm(9), 3)
+	C = matrix(rnorm(9), 3)
+	###
+	
+	# Print vech:
+	A
+	vech(A)
+	###
+	
+	# Print vec:
+	B
+	vec(B)
+	###
+	
+	# Vector Product:
+	A %*% B
+	###
+	
+	# Kronecker Product:
+	A %x% B
+	# Left Hand Side:
+	LHS = vec ( A %*% B %*% C )
+	# Right Hand Side:
+	# %x# denotes the Kronecker Product
+	RHS = ( t(C) %x% A ) %*% vec(B)
+	# Test the Difference:
+	data.frame(LHS, RHS, LHS-RHS)
+	###
+
+	
+
+# ------------------------------------------------------------------------------
+
+
+### Example: 7 Missing Values in a Data Matrix 
+
+	# Write R functions which remove, substitute, interpolate and
+	# impute missing values in a matrix object:
+	#   1. removeNA        removes NAs from a matrix 
+	#                      object
+	#   2. subtituteNA     substitutes NAs by zeroes, the column 
+	#                      mean or column median
+	#   3. interpNA        interpolate NAs using R's "approx" 
+	#                      function
+	#   4. knnNA           imputes NAs by the knn-Algorithm using R's
+	#                      contributed function "knn" from the "EMV" Package
+	# Notes:
+	#   We didn't take care, that NAs at the border of a matrix are
+	#   properly considered. That has still to be done!
+	#   The R functions can be found in "funSeries.R"
+	###
+
+    # Generate a matrix with missing values:
+    M = matrix(round(rnorm(40), 2), ncol = 5)
+    M[2:3, 1] = M[4, 3:4] = c(NA, NA)
+    M[7, 1] =  NA
+    colnames(M) = c("a", "b", "c", "d", "e")
+    rownames(M) = paste("R", as.character(1:8), sep = "")
+    M
+    ###
+       
+    # Remove rows with missing values from M:
+    M
+    removeNA(M)
+    # Remove Columns with NAs from M:
+    t(removeNA(t(M)))
+    ###  
+    
+    # Substitute missing values with Zeros, the Median and Mean:
+    M
+    substituteNA(M)
+    substituteNA(M, "median")
+    round(substituteNA(M, "mean"), 2)
+    ###
+   
+    # Interpolate by Columns:
+    M
+    interpNA(M, "before")
+    interpNA(M, "after")
+    interpNA(M, "linear")
+    
+    # By Rows:
+    M
+    t(interpNA(t(M), "before"))
+    t(interpNA(t(M), "after"))
+    t(interpNA(t(M), "linear"))
+    ###
+    
+    # Use "knn" Algorithm:
+    knnNA(M, k=2)
+    round(knnNA(M, k = 2, correlation = TRUE), 2)
+    # Apply it to the transposed matrix:
+    t(round(knnNA(t(M), k = 2), 2))
+    t(round(knnNA(t(M), k = 2, correlation = TRUE), 2))
+    ###
+    
+
 ################################################################################
 
+   

@@ -437,17 +437,8 @@ Utts J.M. (1982);
 }
 
 
-\seealso{
-	
-	\code{classicalTests},
-	\code{tseriesTests}.
-	
-}
-
-
 \examples{
-## SOURCE("fBasics.A0-SPlusCompatibility")
-## SOURCE("fMultivar.A2-RegressionTests")
+## SOURCE("fMultivar.B2-RegressionTests")
 
 ## bg -
    xmpMultivar("\nStart: Breusch-Godfrey Test > ")

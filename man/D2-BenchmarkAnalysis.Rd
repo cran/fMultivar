@@ -203,8 +203,8 @@ maxDrawDown(x)
 
 
 \examples{
-## SOURCE("fBasics.A0-SPlusCompatibility")
 ## SOURCE("fMultivar.D2-BenchmarkAnalysis")
+
 \dontrun{
 ## ohlcPlot -
    # Plot OHLC for SP500

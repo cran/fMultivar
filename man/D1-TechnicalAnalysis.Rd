@@ -166,10 +166,9 @@ EWMA(x, lambda, startup = 0)
 
 
 \examples{
-## SOURCE("fBasics.A0-SPlusCompatibility")
 ## SOURCE("fSeries.D1-TechnicalAnalysis")
 
-	# Currently no examples ...
+## -
 }
    
 

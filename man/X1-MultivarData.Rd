@@ -65,9 +65,9 @@
 
 
 \examples{
-## SOURCE("fBasics.A0-SPlusCompatibility")
+## SOURCE("fMultivar.X1-MultivarData")
 
-## none -
+## -
 } 
  
  

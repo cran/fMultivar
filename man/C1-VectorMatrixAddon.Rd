@@ -1,6 +1,6 @@
-\name{MatrixAddon}
+\name{VectorMatrixAddon}
 
-\alias{MatrixAddon}
+\alias{VectorMatrixAddon}
 
 \alias{triang}
 \alias{Triang}
@@ -27,7 +27,7 @@
 \alias{pdl}
 
 
-\title{Matrix Arithmetics and Linear Algebra}
+\title{Vector/Matrix Arithmetics and Linear Algebra}
 
 
 \description{
@@ -457,8 +457,7 @@ Moler C., van Loan C., (2003);
 
 
 \examples{
-## SOURCE("fBasics.A0-SPlusCompatibility")
-## SOURCE("fMultivar.B1-MatrixAddon")
+## SOURCE("fMultivar.C1-MatrixAddon")
 
 ## Create Pascal Matrix:
    xmpMultivar("\nStart: Pascal Matrix > ")

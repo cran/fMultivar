@@ -36,7 +36,7 @@
 #  getReturns                Computes return series given a price series
 #  maxDrawDown               Computes the maximum drawdown
 #  sharpeRatio               Calculates the Sharpe Ratio
-#  sterling Ratio            Calculates the Sterling Ratio
+#  sterlingRatio             Calculates the Sterling Ratio
 #  ohlcPlot                  Creates a Open-High-Low-Close plot
 ################################################################################
 

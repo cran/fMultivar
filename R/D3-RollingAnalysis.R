@@ -34,11 +34,12 @@
 #   rollVar                   Compute Rolling Variance
 #   rollMin                   Compute Rolling Minimum
 #   rollMax                   Compute Rolling Maximum
+#   .roll.RUnit               Unit Testing
 ################################################################################
 
 
 rollFun = 
-function(x, n, FUN, ...) 
+function(x, n, trim = TRUE, na.rm = FALSE, FUN, ...) 
 {   # A function implemented by Diethelm Wuertz
 
     # Description:
@@ -47,7 +48,22 @@ function(x, n, FUN, ...)
     # FUNCTION:
     
     # Transform:
-    x = as.vector(x)
+    x.orig = x
+    if (is.timeSeries(x)) TS = TRUE else TS = FALSE
+    if (TS) {
+    	positions = x.orig@positions
+    	x = x.orig@Data[, 1]
+    	
+	} else {
+		x = as.vector(x.orig)
+		names(x) = NULL
+	}
+	
+	# Remove NAs:
+    if (na.rm) { 
+	    if (TS) positions = positions[!is.na(x)]
+    	x = as.vector(na.omit(x))
+	}
     
     # Roll FUN:
     start = 1
@@ -60,6 +76,18 @@ function(x, n, FUN, ...)
     
     # Result:
     ans = apply(m, MARGIN = 1, FUN = FUN, ...)
+    
+    # Trim:
+    if (!trim) 
+    	ans = c(rep(NA, (n-1)), ans)
+    if (trim & TS)
+    	positions = positions[-(1:(n-1))]
+        
+    # Back to timeSeries:
+    if (TS) {
+    	ans = timeSeries(as.matrix(ans), positions, units = x.orig@units,
+    		FinCenter = x.orig@FinCenter)
+	}
     
     # Return value:
     ans
@@ -89,39 +117,10 @@ function(x, n = 9, trim = TRUE, na.rm = FALSE)
 	# 	rollMean(x, n = 4, trim = TRUE, na.rm = TRUE)
 	
 	# FUNCTION:
-    
-    # Transform:
-    x.orig = x
-    if (is.timeSeries(x)) {
-    	positions = x.orig@positions
-    	x = x.orig@Data[, 1]
-    	
-	} else {
-		x = as.vector(x.orig)
-		names(x) = NULL
-	}
-	
-	# Remove NAs:
-    if (na.rm) { 
-	    positions = positions[!is.na(x)]
-    	x = as.vector(na.omit(x))
-	}
 	
 	# Roll Mean:
-    rmean = rollFun(x = x, n = n, FUN = mean) 
+    rmean = rollFun(x = x, n = n, trim = trim, na.rm = na.rm, FUN = mean) 
     
-    # Trim:
-    if (!trim) 
-    	rmean = c(rep(NA, (n-1)), rmean)
-    if (trim)
-    	positions = positions[-(1:(n-1))]
-        
-    # Back to timeSeries:
-    if (is.timeSeries(x.orig)) {
-    	rmean = timeSeries(as.matrix(rmean), positions, units = x.orig@units,
-    		FinCenter = x.orig@FinCenter)
-	}
-    	
     # Return Value:
     rmean
 }
@@ -139,42 +138,20 @@ function(x, n = 9, trim = TRUE, unbiased = TRUE, na.rm = FALSE)
 
     # FUNCTION:
     
-    # Transform:
-    x.orig = x
-    if (is.timeSeries(x)) {
-    	positions = x.orig@positions
-    	x = x.orig@Data[, 1]
-    	
-	} else {
-		x = as.vector(x.orig)
-		names(x) = NULL
-	}
-    
-    # Remove NAs:
-    if (na.rm) { 
-	    positions = positions[!is.na(x)]
-    	x = as.vector(na.omit(x))
-	}
-    	
+    if (is.timeSeries(x)) TS = TRUE else TS = FALSE 
+   
     # Roll Var:
-    rvar = rollFun(x = x, n = n, FUN = var) 
+    rvar = rollFun(x = x, n = n, trim = trim, na.rm = na.rm, FUN = var) 
     
     # Unbiased ?
-    if (!unbiased) 
-    	rvar = (rvar * (n-1))/n
-    
-    # Trim:
-    if (!trim) 
-    	rvar = c(rep(NA, (n-1)), rvar)
-    if (trim)
-    	positions = positions[-(1:(n-1))]
-    	
-    # Back to timeSeries:
-    if (is.timeSeries(x.orig)) {
-    	rvar = timeSeries(as.matrix(rvar), positions, units = x.orig@units,
-    		FinCenter = x.orig@FinCenter)
+    if (!unbiased) {
+    	if (TS) {
+    		rvar@Data = (rvar@Data * (n-1))/n
+		} else {
+			rvar = (rvar * (n-1))/n
+		}
 	}
-    
+
     # Return Value:
     rvar 
 }
@@ -192,37 +169,8 @@ function(x, n = 9, trim = TRUE, na.rm = FALSE)
 
     # FUNCTION:
     
-    # Transform:
-    x.orig = x
-    if (is.timeSeries(x)) {
-    	positions = x.orig@positions
-    	x = x.orig@Data[, 1]
-    	
-	} else {
-		x = as.vector(x.orig)
-		names(x) = NULL
-	}
-    
-    # Remove NAs:
-    if (na.rm) { 
-	    positions = positions[!is.na(x)]
-    	x = as.vector(na.omit(x))
-	}
-    	
     # Roll Max:
-    rmax = rollFun(x = x, n = n, FUN = max)
-    
-    # Trim:
-    if (!trim) 
-    	rmax = c(rep(NA, (n-1)), rmax)
-    if (trim)
-    	positions = positions[-(1:(n-1))]
-    	
-    # Back to timeSeries:
-    if (is.timeSeries(x.orig)) {
-    	rmax = timeSeries(as.matrix(rmax), positions, units = x.orig@units,
-    		FinCenter = x.orig@FinCenter)
-	}
+    rmax = rollFun(x = x, n = n, trim = trim, na.rm = na.rm,  FUN = max)
     
     # Return Value:
     rmax 
@@ -240,41 +188,116 @@ function(x, n = 9, trim = TRUE, na.rm = FALSE)
     #   Compute rolling function minimum
 
     # FUNCTION:
-    
-    # Transform:
-    x.orig = x
-    if (is.timeSeries(x)) {
-    	positions = x.orig@positions
-    	x = x.orig@Data[, 1]
-    	
-	} else {
-		x = as.vector(x.orig)
-		names(x) = NULL
-	}
-    
-    # Remove NAs:
-    if (na.rm) { 
-	    positions = positions[!is.na(x)]
-    	x = as.vector(na.omit(x))
-	}
-    	
+ 
     # Roll Min:
-    rmin = rollFun(x = x, n = n, FUN = min) 
-    
-    # Trim:
-    if (!trim) 
-    	rmin = c(rep(NA, (n-1)), rmin)
-    if (trim)
-    	positions = positions[-(1:(n-1))]
-    	
-    # Back to timeSeries:
-    if (is.timeSeries(x.orig)) {
-    	rmin = timeSeries(as.matrix(rmin), positions, units = x.orig@units,
-    		FinCenter = x.orig@FinCenter)
-	}
+    rmin = rollFun(x = x, n = n, trim = trim, na.rm = na.rm,  FUN = min) 
     
     # Return Value:
     rmin 
+}
+
+
+# ------------------------------------------------------------------------------
+
+
+.roll.RUnit =
+function()
+{
+	
+	# Try Vector:
+	cat("\n-------- Vector -------------------------------\n")
+	
+	# .roll.RUnit()
+	n = 3
+	
+	for (na.rm in c(TRUE, FALSE)) {
+		
+		x = 1:10
+		if (na.rm) x[6] = NA
+		cat("\n\nna.rm: ", na.rm)
+		cat("\nx: ", x, "\n")
+		
+		for (trim in c(TRUE, FALSE)) {
+		
+			cat("\ntrim: ", trim, "\n\n")
+			
+			# Sum:
+			ans = rollFun(x, n = n, trim = trim, na.rm = na.rm, FUN = sum)
+			print(ans)
+			# 15 20 25 30 35 40 45 50 55 60 65 70 75 80 85 90
+			
+			# Mean:
+			ans = rollFun(x, n = n, trim = trim, na.rm = na.rm, FUN = mean)
+			#  3  4  5  6  7  8  9 10 11 12 13 14 15 16 17 18
+			print(ans)
+			
+			# Var:
+			ans = rollFun(x, n = n, trim = trim, na.rm = na.rm, FUN = var)
+			#  2.5 2.5 2.5 2.5 2.5 2.5 2.5 2.5 2.5 2.5 2.5 2.5 2.5 2.5 2.5 2.5
+			print(ans)
+			
+			# Min:
+			ans = rollFun(x, n = n, trim = trim, na.rm = na.rm, FUN = min)
+			#  1  2  3  4  5  6  7  8  9 10 11 12 13 14 15 16
+			print(ans)
+			
+			# Max:
+			ans = rollFun(x, n = n, trim = trim, na.rm = na.rm, FUN = max)
+		 	#  5  6  7  8  9 10 11 12 13 14 15 16 17 18 19 20
+			print(ans)
+			
+		}
+	}
+	
+	# Try timeSeries:
+	cat("\n-------- Time Series --------------------------\n")
+	charvec = paste("1999", 10, 11:20, sep = "-")
+	ts = timeSeries(data = 1:10, charvec, units = "SERIES", zone = "GMT",
+		FinCenter = "GMT") 
+	
+	# .roll.RUnit()
+	n = 3
+	
+	for (na.rm in c(TRUE, FALSE)) {
+		
+		x = ts
+		if (na.rm) x@Data[6, ] = NA
+		cat("\n\nna.rm: ", na.rm)
+		print(x)
+		
+		for (trim in c(TRUE, FALSE)) {
+		
+			cat("\ntrim: ", trim, "\n\n")
+			
+			# Sum:
+			ans = rollFun(x, n = n, trim = trim, na.rm = na.rm, FUN = sum)
+			print(ans)
+			# 15 20 25 30 35 40 45 50 55 60 65 70 75 80 85 90
+			
+			# Mean:
+			ans = rollFun(x, n = n, trim = trim, na.rm = na.rm, FUN = mean)
+			#  3  4  5  6  7  8  9 10 11 12 13 14 15 16 17 18
+			print(ans)
+			
+			# Var:
+			ans = rollFun(x, n = n, trim = trim, na.rm = na.rm, FUN = var)
+			#  2.5 2.5 2.5 2.5 2.5 2.5 2.5 2.5 2.5 2.5 2.5 2.5 2.5 2.5 2.5 2.5
+			print(ans)
+			
+			# Min:
+			ans = rollFun(x, n = n, trim = trim, na.rm = na.rm, FUN = min)
+			#  1  2  3  4  5  6  7  8  9 10 11 12 13 14 15 16
+			print(ans)
+			
+			# Max:
+			ans = rollFun(x, n = n, trim = trim, na.rm = na.rm, FUN = max)
+		 	#  5  6  7  8  9 10 11 12 13 14 15 16 17 18 19 20
+			print(ans)
+			
+		}
+	}
+		
+	invisible()
 }
 
 

@@ -65,7 +65,7 @@ xmpMultivar(prompt = "")
 
 
 \examples{
-## SOURCE("fBasics.A0-SPlusCompatibility")
+## SOURCE("fMultivar.Z1-MultivarTools")
 
 \dontrun{
 ## xmpfMultivar -

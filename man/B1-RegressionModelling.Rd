@@ -101,6 +101,17 @@
 	is becomes not necessary to install the contribute \code{mars} and
 	\code{polyspline} packages. Nevertheless, if loaded you can use them 
 	in your environment, they don't intervene with Rmetrics.
+	\cr
+	
+	For further information we refer to the original help pages of the
+	functions 
+	\code{lm}, 
+  	\code{glm},
+  	\code{gam},
+  	\code{ppr},
+  	\code{mars},
+  	\code{polymars}, and
+  	\code{nnet}. 
 	
 }
 
@@ -580,7 +591,6 @@ OLS(formula, data, \dots)
 }
 
 
-
 \references{
 
 Belsley D.A., Kuh E., Welsch R.E. (1980);
@@ -680,22 +690,8 @@ Wood (2001);
 }
 
 
-\seealso{
-
-  	\code{\link{lm}}, 
-  	\code{\link{glm}},
-  	\code{gam},
-  	\code{\link{ppr}},
-  	\code{mars},
-  	\code{polymars},
-  	\code{nnet}.
-
-}
-
-
 \examples{
-## SOURCE("fBasics.A0-SPlusCompatibility")
-## SOURCE("fMultivar.A1-RegressionModelling")
+## SOURCE("fMultivar.B1-RegressionModelling")
 
 ## regFit -
    xmpMultivar("\nStart: Load US Recession Modelling Data Set > ")

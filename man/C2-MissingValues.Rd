@@ -126,8 +126,7 @@ Tibshirani R., Botstein D., Altman R.B., (2001);
 
 
 \examples{
-## SOURCE("fBasics.A0-SPlusCompatibility")
-## SOURCE("fMultivar.B2-MissingValues")
+## SOURCE("fMultivar.C2-MissingValues")
 
 ## Create a Matrix with NAs:
    X = matrix(rnorm(100), ncol = 5)
