@@ -48,8 +48,8 @@
 
 
 \usage{
-lmTest(formula, method = ("bg", "bp", "dw", "gq", "harv", "hmc", 
-	"rain", "reset", \dots)
+lmTest(formula, method = c("bg", "bp", "dw", "gq", "harv", "hmc", 
+	"rain", "reset"), data = list(), \dots)
 	
 bgTest(formula, order = 1, type = c("Chisq", "F"), data = list())
 bpTest(formula, varformula = NULL, studentize = TRUE, data = list())

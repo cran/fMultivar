@@ -23,6 +23,10 @@
 \alias{vech}
 
 
+\alias{tslag}
+\alias{pdl}
+
+
 \title{Matrix Arithmetics and Linear Algebra}
 
 
@@ -125,7 +129,14 @@
 	\code{qr} \tab R: Returns the QR decomposition of a matrix, \cr
 	\code{solve} \tab R: Solves a system of linear equations, \cr
 	\code{backsolve} \tab R: ... use when the matrix is upper triangular, \cr
-	\code{forwardsolve} \tab R: ... use when the matrix is lower triangular. }  
+	\code{forwardsolve} \tab R: ... use when the matrix is lower triangular. } 
+	
+	Time Series Generation:
+	
+	\tabular{ll}{
+	\code{tslag} \tab R: Lagged or leading vector/matrix of selected order(s), \cr
+	\code{pdl} \tab R: Regressor matrix for polynomial distributed lags. } 
+	 
 
 }
 
@@ -150,11 +161,23 @@ mexp(x, order = 8, method = c("pade", "taylor"))
 
 vec(x)
 vech(x)
+
+pdl(x, d = 2, q = 3, trim = FALSE)
+tslag(x, k = 1, trim = FALSE)
 }
 
 
 \arguments{
 
+	\item{d}{
+	 	[pdl] - \cr
+	 	an integer specifying the order of the polynomial. 
+	 	}
+	\item{k}{
+	 	[tslag] - \cr
+	 	an integer value, the number of positions the new series is 
+	 	to lag or to lead the input series. 
+	 	}
 	\item{method}{
 	 	[mexp] - \cr
 	 	Two methods are provided for the computation of the exponential
@@ -192,8 +215,30 @@ vech(x)
 		as the maximum of the sum of the absolute valued elements
 		of rows of the matrix.
 	 	}
+	\item{q}{
+	 	[pdl] - \cr
+	 	an integer specifying the number of lags to use in 
+		creating polynomial distributed lags. This must be 
+		greater than d. 
+	 	}
+	\item{trim}{
+	 	[pdl] - \cr
+	 	a logical flag; if TRUE, the missing values at 
+		the beginning of the returned matrix will be trimmed. 
+		\cr
+		[tslag] - \cr
+	 	 a logical flag, if TRUE, the missing values at the 
+		beginning or end of the returned series will be trimmed. 
+		The default value is FALSE. 
+	 	}
 	\item{x, y}{
 		a numeric matrix.
+		\cr
+		[tslag] - \cr
+		a numeric vector, missing values are allowed.
+		\cr
+		[pdl] - \cr
+		a numeric vector.
 		}
 	\item{\dots}{
 		arguments to be passed.
@@ -376,7 +421,16 @@ vech(x)
 	\code{solve} solves a system of linear equations, use
 	\code{backsolve} when the matrix is upper triangular, and
 	\code{forwardsolve} when the matrix is lower triangular.
-	 
+	\cr
+	
+	
+	\code{Time Series:}
+	\cr
+	The function \code{pdl} returns a regressor matrix suitable 
+	for polynomial distributed lags. 
+	\cr
+	The function \code{tslag} returns a lagged/led vector or matrix 
+	for given time series data. 	 
 }
 
 

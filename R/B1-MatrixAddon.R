@@ -81,8 +81,12 @@
 #  kappa                R  returns the condition number of a matrix
 #  qr                   R  returns the QR decomposition of a matrix
 #  solve                R  solves a system of linear equations
-#  backsolve            R ... use when the matrix is upper triangular
-#  forwardsolve         R ... use when the matrix is lower triangular
+#  backsolve            R  ... use when the matrix is upper triangular
+#  forwardsolve         R  ... use when the matrix is lower triangular
+# TIME SERIES           DESCRIPTION:
+#  tslag                R  Lagged or leading vector/matrix of selected order(s)
+#  .tslag1                 Internal Function used by tslag
+#  pdl                  R  Regressor matrix for polynomial distributed lags  
 ################################################################################
 # NOTES:
 #  WHERE YOU FIND THE FUCTIONS?
@@ -569,6 +573,124 @@ function(x)
 	
 	# Return Value:
 	t(t(as.vector(x)))
+}
+
+
+################################################################################
+
+
+.tslag1 = 
+function(x, k) 
+{	# A function implemented by Diethelm Wuertz
+
+	# Description:
+	#	Internal Function used by function tslag.
+		
+	
+	# FUNCTION:
+	y = x
+	if (k > 0) y = c(rep(NA, times = k), x[1:(length(x)-k)])
+	if (k < 0) y = c(x[(-k+1):length(x)], rep(NA, times = -k))
+	
+	# Return Value:
+	y 
+}
+
+
+# ------------------------------------------------------------------------------
+
+
+tslag = 
+function(x, k = 1, trim = FALSE)
+{	# A function implemented by Diethelm Wuertz
+
+	# Description:
+	#	Creates a lagged or leading vector/matrix of selected order(s).
+	
+	# Arguments:
+	#	x - a vector of data, missing values (NA) are allowed. 
+	#	k - the number of positions the new series is to lag 
+	#		or to lead the input series. 
+	#	trim - a logical flag, if TRUE, the missing values at the 
+	#		beginning or end of the returned series will be trimmed. 
+	#		The default value is FALSE. 
+	
+	# Details:
+	#	With a positive value of "k" we get a lagged series and with
+	#	a negative value we get a leading series. 
+	
+	# Examples:
+	#	tslag(rnorm(10), 2)
+	#	tslag(rnorm(10), -2:2)
+	#	tslag(rnorm(10), -2:2, trim = TRUE)
+	
+	# FUNCTION:
+		
+	# Bind:
+	ans = NULL
+	for ( i in k) {
+		ans = cbind(ans, .tslag1(x, i)) 
+	}
+		
+	# Trim:
+	if (trim) {
+		indexes = (1:length(ans[,1]))[!is.na(apply(ans, 1, sum))]
+		ans = ans[indexes, ] 
+	}
+		
+	# As Vector:
+	if (length(k) == 1) ans = as.vector(ans)
+	
+	# Return Value:
+	ans
+}
+
+
+# ------------------------------------------------------------------------------
+
+
+pdl = 
+function(x, d = 2, q = 3, trim = FALSE)
+{	# A function implemented by Diethelm Wuertz
+
+	# Description:
+	#	Regressor matrix for polynomial distributed lags
+	
+	# Aruments:
+	#	x - a numeric vector.
+	#	d - an integer specifying the order of the polynomial. 
+	# 	q - an integer specifying the number of lags to use in 
+	#		creating polynomial distributed lags. This must be 
+	#		greater than d. 
+	#	trim - a logical flag; if TRUE, the missing values at 
+	#		the beginning of the returned matrix will be trimmed. 
+
+	# Value:
+	#	Returns a matrix representing the regressor matrix. 
+
+	# Example:
+	#	stack.loss = c(
+	#		42, 37, 37, 28, 18, 18, 19, 20, 15, 14, 14, 
+	#		13, 11, 12,  8,  7,  8,  8,  9, 15, 15)
+	#	pdl(stack.loss)
+	
+	# FUNCTION:
+
+	# Polynomial distributed lags:
+	M = tslag(x, 1:q, FALSE)
+	C = NULL
+	for (i in 0:d) { C = rbind(C, (1:q)^i) }
+	Z = NULL
+	for (i in 1:(d+1)) { Z = cbind(Z, apply(t(C[i,]*t(M)), 1, sum)) }
+	Z[, 1] = Z[, 1] + x
+	
+	# Trim:
+	if (trim) {
+		indexes = (1:length(Z[,1]))[!is.na(apply(Z, 1, sum))]
+		Z = Z[indexes, ] }
+
+	# Return Value:
+	Z
 }
 
 
