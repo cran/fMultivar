@@ -21,7 +21,8 @@
     of financial markets. The collection 
     provides a set of functions for the 
     computation of returns, for the display 
-    of price charts, and for benchmark measurements.
+    of price charts, and for benchmark 
+    measurements.
     \cr
     
     The functions are:
@@ -199,9 +200,6 @@ maxDrawDown(x)
 
 
 \examples{
-## SOURCE("fMultivar.1B-BenchmarkAnalysis")
-
-\dontrun{
 ## ohlcPlot -
    # Plot OHLC for SP500
    # ohlcPlot(x, ylab = "price", main = instrument)
@@ -216,13 +214,13 @@ maxDrawDown(x)
    sharpeRatio(ftse)
    
 ## maxDrawDown -
-   par(mfrow = c(1, 1), cex = 0.7)
    data(EuStockMarkets)
    dax = log(EuStockMarkets[, "DAX"])
    mdd = maxDrawDown(dax)
    mdd
    # Plot DAX:
    plot(dax)
+   grid()
    segments(time(dax)[mdd$from], dax[mdd$from],
      time(dax)[mdd$to], dax[mdd$from])
    segments(time(dax)[mdd$from], dax[mdd$to],
@@ -232,12 +230,8 @@ maxDrawDown(x)
    title(main = "DAX: Max Drawdown")
    
 ## getReturns -
-   par(mfrow = c(1, 1), cex = 0.7)
-   data(EuStockMarkets)
-   dax = log(EuStockMarkets[, "DAX"])
-   plot(getReturns(dax))
-   title(main = "DAX: Returns")
-}
+   Close = as.timeSeries(data(msft.dat))[, "Close"]
+   seriesPlot(getReturns(Close))
 }
   
 

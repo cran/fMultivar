@@ -20,7 +20,7 @@
 \alias{summary.fMV}
 
 
-\title{Multivariate Normal and Student-t Distributions}
+\title{Multivariate Skew Normal and Student-t Distributions}
 
 
 \description{
@@ -70,7 +70,7 @@ mvFit(x, method = c("snorm", "st"), fixed.df = NA, title = NULL,
 
 \method{print}{fMV}(x, \dots)
 \method{plot}{fMV}(x, which = "ask", \dots)
-\method{summary}{fMV}(object, which = "ask", \dots)
+\method{summary}{fMV}(object, which = "ask", doplot = TRUE, \dots)
 }
 
 
@@ -80,6 +80,10 @@ mvFit(x, method = c("snorm", "st"), fixed.df = NA, title = NULL,
         [mvFit] - \cr
         a character string, assigning a brief description to an 
         \code{"fMV"} object.
+        }
+    \item{doplot}{
+        a logical value, by default TRUE. Should a plot be generated
+        and displayed?
         }
     \item{dim}{
         [*mvsnorm][*mvst] - \cr
@@ -191,6 +195,9 @@ mvFit(x, method = c("snorm", "st"), fixed.df = NA, title = NULL,
     method allows for selective batch and interactive plots. The 
     argument \code{which} takes care for the desired operation.
     
+    The contributed R package \code{mvtnorm} is required, the contributed 
+    R package \code{sn} is builtin, since it is not available on the
+    Debian Software Server.   
 }
 
 
@@ -343,8 +350,6 @@ Hothorn T., Bretz F., Genz A. (2001);
 
 
 \examples{
-## SOURCE("fMultivar.7B-MultivariateDistribution")
-
 ## rmvst - 
    par(mfcol = c(3, 1), cex = 0.7)
    r1 = rmvst(200, dim = 1)
@@ -379,21 +384,6 @@ Hothorn T., Bretz F., Genz A. (2001);
    image(x, x, Z)
    contour(x, x, Z, add = TRUE)
    title(main = "Bivariate Student-t Contours")
-   
-## plot -
-   # Student-t: Fixed number of degrees of freedo
-   fit2 = mvFit(x = rmvst(100, 5), method = "st", fixed.df = NA)
-   # Show Model Slot:
-   fit2@model
-   # Show Scatterplot:
-   ## par(mfrow = c(1, 1), cex = 0.7)
-   ## plot(fit2, which = c(TRUE, FALSE, FALSE, FALSE, FALSE))
-   # Show QQ and PP Plots:
-   ## par(mfrow = c(2, 2), cex = 0.7)
-   ## plot(fit2, which = !c(TRUE, FALSE, FALSE, FALSE, FALSE))
-   # Interactive Plots:
-   # par(mfrow = c(1, 1))
-   # plot(fit2, which = "ask")
 }
 
 

@@ -16,7 +16,7 @@
 
 # Copyrights (C)
 # for this R-port: 
-#   1999 - 2004, Diethelm Wuertz, GPL
+#   1999 - 2007, Diethelm Wuertz, GPL
 #   Diethelm Wuertz <wuertz@itp.phys.ethz.ch>
 #   info@rmetrics.org
 #   www.rmetrics.org
@@ -50,15 +50,14 @@
 ################################################################################
 
 
-### Uncomplete - Under Development ###
-
-
-test.helpFile = 
+test.aaa = 
 function()
 {
     # Help File:
     helpFile = function() { 
-        example(BivariateTools); return() }
+        example(BivariateTools, ask = FALSE)
+        return() 
+    }
     checkIdentical(
         target = class(try(helpFile())),
         current = "NULL")
@@ -68,10 +67,23 @@ function()
 }
 
 
+################################################################################
+
+
+test.grid2d =
+function()
+{
+    NA
+    
+    # Return Value:
+    return()    
+}
+
+
 # ------------------------------------------------------------------------------
 
 
-test.density =
+test.density2d =
 function()
 {
     # Data:
@@ -82,17 +94,6 @@ function()
     .perspPlot(D)
     .contourPlot(D)
     
-    # Histogram:
-    H = hist2d(x = z[, 1], y = z[, 2])
-    .perspPlot(H)
-    .contourPlot(H)
-    
-    # Probability:
-    # P = integrate2d(fun = *)
-    # .perspPlot(P)
-    # .contourPlot(P)
-    
-    
     # Return Value:
     return()    
 }
@@ -101,12 +102,45 @@ function()
 # ------------------------------------------------------------------------------
 
 
-test.bivariate.norm =
+test.hist2d =
 function()
 {
-    #  pnorm2d               Computes bivariate Normal probability function
-    #  dnorm2d               Computes bivariate Normal density function
-    #  rnorm2d               Generates bivariate normal random deviates
+    # Data:
+    z = rnorm2d(1000)
+   
+    # Histogram:
+    H = hist2d(x = z[, 1], y = z[, 2])
+    .perspPlot(H)
+    .contourPlot(H)
+
+    # Return Value:
+    return()    
+}
+
+
+# ------------------------------------------------------------------------------
+
+
+test.integrate2d =
+function()
+{
+    # Data:
+    z = rnorm2d(1000)
+  
+    # Return Value:
+    return()    
+}
+
+
+# ------------------------------------------------------------------------------
+
+
+test.norm2d =
+function()
+{
+    #  pnorm2d - Computes bivariate Normal probability function
+    #  dnorm2d - Computes bivariate Normal density function
+    #  rnorm2d - Generates bivariate normal random deviates
     
     # Normal Density:
     x = (-40:40)/10
@@ -132,12 +166,12 @@ function()
 # ------------------------------------------------------------------------------
 
 
-test.bivariate.cauchy =
+test.cauchy2d =
 function()
 {
-    #  pcauchy2d             Computes bivariate Cauchy probability function
-    #  dcauchy2d             Computes bivariate Cauchy density function
-    #  rcauchy2d             Generates bivariate Cauchy random deviates
+    #  pcauchy2d - Computes bivariate Cauchy probability function
+    #  dcauchy2d - Computes bivariate Cauchy density function
+    #  rcauchy2d - Generates bivariate Cauchy random deviates
     
     # Cauchy Density:
     x = (-40:40)/10
@@ -163,12 +197,12 @@ function()
 # ------------------------------------------------------------------------------
 
 
-test.bivariate.t =
+test.t2d =
 function()
 {
-    #  pt2d                  Computes bivariate Student-t probability function
-    #  dt2d                  Computes bivariate Student-t density function
-    #  rt2d                  Generates bivariate Student-t random deviates
+    #  pt2d - Computes bivariate Student-t probability function
+    #  dt2d - Computes bivariate Student-t density function
+    #  rt2d - Generates bivariate Student-t random deviates
     
     # Student Density:
     x = (-40:40)/10
@@ -194,15 +228,15 @@ function()
 # ------------------------------------------------------------------------------
 
 
-test.elliptical =
+test.delliptical2d =
 function()
-{
-    
+{ 
     # Settings:
     xy = grid2d((-50:50)/10)
     
     # Contour Plots:
-    par(mfrow = c(3, 2), cex = 0.7)
+    par(ask = FALSE)
+    par(mfrow = c(1, 1))
     contour(delliptical2d(xy, rho = 0.75, param = NULL, 
         type = "norm", output = "list"), main = "norm")
     contour(delliptical2d(xy, rho = 0.75, param = NULL, 
@@ -216,18 +250,19 @@ function()
     contour(delliptical2d(xy, rho = 0.75, param = NULL, 
         type = "epower", output = "list"), main = "epower")
         
-# Return Value:
+    # Return Value:
     return()    
 }
 
 
 
-# ------------------------------------------------------------------------------
+################################################################################
 
 
 if (FALSE) {
     require(RUnit)
-    testResult = runTestFile("C:/Rmetrics/SVN/trunk/fMultivar/test/runit7A.R")
+    testResult = runTestFile("C:/Rmetrics/SVN/trunk/fMultivar/tests/runit7A.R",
+        rngKind = "Marsaglia-Multicarry", rngNormalKind = "Inversion")
     printTextProtocol(testResult)
 }
    

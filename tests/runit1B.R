@@ -16,7 +16,7 @@
 
 # Copyrights (C)
 # for this R-port: 
-#   1999 - 2006, Diethelm Wuertz, GPL
+#   1999 - 2007, Diethelm Wuertz, GPL
 #   Diethelm Wuertz <wuertz@itp.phys.ethz.ch>
 #   info@rmetrics.org
 #   www.rmetrics.org
@@ -40,15 +40,14 @@
 ################################################################################
 
 
-### Uncomplete - Under Development ###
-
-
-test.helpFile = 
+test.aaa = 
 function()
 {
     # Help File:
     helpFile = function() { 
-        example(BenchmarkAnalysis); return() }
+        example(BenchmarkAnalysis, ask = FALSE)
+        return() 
+    }
     checkIdentical(
         target = class(try(helpFile())),
         current = "NULL")
@@ -58,41 +57,50 @@ function()
 }
 
 
-# ------------------------------------------------------------------------------
+################################################################################
 
 
 test.getReturns =
 function()
-{
-    URL = "http://www.itp.phys.ethz.ch/econophysics/R/data/organisations/YAHOO/data/MSFT.CSV"
-    download.file(URL, "MSFT.CSV")
-    X = readSeries("MSFT.CSV")
-    print(X)    
+{     
+    # getReturns - Computes return series given a price series
     
+    # Data from fEcofin:
+    X = as.timeSeries(data(msft.dat))
+    print(head(X))
+        
+    # Get Returns:
     R = getReturns(X)
-    print(R)
-    print(R@units)
+    head(R)
+    
+    # Get Returns:
+    R = getReturns(X, percentage = TRUE)
+    head(R)
     
     # Return Value:
     return()
 }
 
 
-# ------------------------------------------------------------------------------
+################################################################################
 
 
 test.maxDrawDown =
 function()
-{
-    URL = "http://www.itp.phys.ethz.ch/econophysics/R/data/organisations/YAHOO/data/MSFT.CSV"
-    download.file(URL, "MSFT.CSV")
-    X = readSeries("MSFT.CSV")
-    print(X)
+{ 
+    # maxDrawDown - Computes the maximum drawdown
     
-    Close = as.timeSeries(X)[,"Close"]
+    # Data from fEcofin:
+    X = as.timeSeries(data(msft.dat))
+    print(head(X))
     
+    # Closing Prices:
+    Close = as.timeSeries(X)[, "Close"]
+    
+    # Maximum Draw Down:
     maxDrawDown(Close)  
     
+    # Plot:
     plot(Close, type = "l")
     abline(v = as.POSIXct("2000-11-09"), lty = 3, col = "red")
     abline(v = as.POSIXct("2000-12-20"), lty = 3, col = "red")
@@ -105,17 +113,42 @@ function()
 # ------------------------------------------------------------------------------
 
 
-test.Ratio =
+test.sharpeRatio =
 function()
-{
-    URL = "http://www.itp.phys.ethz.ch/econophysics/R/data/organisations/YAHOO/data/MSFT.CSV"
-    download.file(URL, "MSFT.CSV")
-    X = readSeries("MSFT.CSV")
-    print(X)    
+{  
+    # sharpeRatio - Calculates the Sharpe Ratio
     
+    # Data from fEcofin:
+    X = as.timeSeries(data(msft.dat))
+    print(head(X)) 
+    
+    # Get Returns:
     R = getReturns(X)
     
+    # Sharpe Ratio:
     sharpeRatio(R[, "Close"])
+    
+    # Return Value:
+    return()
+}
+
+
+################################################################################
+
+
+test.sterlingRatio =
+function()
+{  
+    # sterlingRatio - Calculates the Sterling Ratio
+    
+    # Data from fEcofin:
+    X = as.timeSeries(data(msft.dat))
+    print(head(X)) 
+    
+    # Get Returns:
+    R = getReturns(X)
+    
+    # Sterling Ratio:
     sterlingRatio(R[, "Close"])
     
     # Return Value:
@@ -123,35 +156,38 @@ function()
 }
 
 
-# ------------------------------------------------------------------------------
+################################################################################
 
 
 test.ohlcPlot =
 function()
-{
-    # Data:
-    URL = "http://www.itp.phys.ethz.ch/econophysics/R/data/organisations/YAHOO/data/MSFT.CSV"
-    download.file(URL, "MSFT.CSV")
-    X = readSeries("MSFT.CSV")
-    print(X)
-        
-    # Returns:
-    R = getReturns(X)[1:10,-5]
+{   
+    #  ohlcPlot - Creates a Open-High-Low-Close plot
     
+    # Data from fEcofin:
+    myFinCenter <<- "GMT"
+    X = as.timeSeries(data(msft.dat))
+    print(head(X))
+        
+    # Get Returns:
+    R = returnSeries(X)[, -5]
+    Y = alignDailySeries(X, method = "fillNA", include.weekends = TRUE)
+
     # Plot:
-    # ohlcPlot(as.ts(R))  # CHECK
+    # ohlcPlot(as.ts(R))                                             # CHECK !!!
     
     # Return Value:
     return()
 }
 
 
-# ------------------------------------------------------------------------------
+################################################################################
 
 
 if (FALSE) {
     require(RUnit)
-    testResult = runTestFile("C:/Rmetrics/SVN/trunk/fMultivar/test/runit1B.R")
+    testResult = runTestFile("C:/Rmetrics/SVN/trunk/fMultivar/tests/runit1B.R",
+        rngKind = "Marsaglia-Multicarry", rngNormalKind = "Inversion")
     printTextProtocol(testResult)
 }
    

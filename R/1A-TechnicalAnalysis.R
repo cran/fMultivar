@@ -16,7 +16,7 @@
 
 # Copyrights (C)
 # for this R-port: 
-#   1999 - 2004, Diethelm Wuertz, GPL
+#   1999 - 2007, Diethelm Wuertz, GPL
 #   Diethelm Wuertz <wuertz@itp.phys.ethz.ch>
 #   info@rmetrics.org
 #   www.rmetrics.org
@@ -28,7 +28,7 @@
 
 
 ################################################################################
-# FUNCTION:                 DESCRIPTION - UTILITY FUNCTIONS:
+# FUNCTION:                 UTILITY FUNCTIONS:
 #  emaTA                     Exponential Moving Average
 #  biasTA                    EMA-Bias
 #  medpriceTA                Median Price                   
@@ -466,7 +466,8 @@ function(high, low)
 
 
 stochasticTA = 
-function (close, high, low, lag1 = 5, lag2 = 3, type = c("fast", "slow")) 
+function (close, high, low, lag1 = 5, lag2 = 3, lag3 = 5, 
+type = c("fast", "slow")) 
 {   # A function written by Diethelm Wuertz
 
     # Description:
@@ -714,7 +715,7 @@ function(close, high, low, lag = 50)
 }
 
 
-################################################################################
+# ------------------------------------------------------------------------------
 
 
 rsiTA = 
@@ -1472,8 +1473,8 @@ function(tradeSignals)
     # Get Lengths from Signals:
     stopifnot(is.timeSeries(tradeSignals))
     data = diff(seriesPositions(tradeSignals))
-    charvec = .tradeSignals@positions[-1]
-    tradeLengths = timeSeries(data, charvec)
+    charvec = tradeSignals@positions[-1]
+    tradeLengths = timeSeries(data, charvec, units = "tradeLengths")
     
     # Return Value:
     tradeLengths
@@ -1495,6 +1496,7 @@ function(Returns, Positions)
     # Compute hit rate:
     Indicator = (Positions * sign(Returns) + 1) / 2
     Rate = mean ( as.vector(Indicator), na.rm = TRUE )  
+    Rate = round(Rate, digits = 3)
     
     # Return Value:
     Rate

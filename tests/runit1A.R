@@ -16,7 +16,7 @@
 
 # Copyrights (C)
 # for this R-port: 
-#   1999 - 2006, Diethelm Wuertz, GPL
+#   1999 - 2007, Diethelm Wuertz, GPL
 #   Diethelm Wuertz <wuertz@itp.phys.ethz.ch>
 #   info@rmetrics.org
 #   www.rmetrics.org
@@ -28,7 +28,7 @@
 
 
 ################################################################################
-# FUNCTION:                 DESCRIPTION - UTILITY FUNCTIONS:
+# FUNCTION:                 UTILITY FUNCTIONS:
 #  emaTA                     Exponential Moving Average
 #  biasTA                    EMA-Bias
 #  medpriceTA                Median Price                   
@@ -75,19 +75,17 @@
 #  .tradeLengths             Computes trade length from trading signals
 #  .hitRate                  Computes hit rates from returns and positions
 ################################################################################
+# OK
 
 
-### Uncomplete - Under Development ###
-
-
-test.helpFile = 
+test.aaa = 
 function()
 {
-    # UNIT TEST:
-    
     # Help File:
     helpFile = function() { 
-        example(TechnicalAnalysis); return() }
+        example(TechnicalAnalysis, ask = FALSE)
+        return() 
+    }
     checkIdentical(
         target = class(try(helpFile())),
         current = "NULL")
@@ -97,28 +95,24 @@ function()
 }
 
 
-# ------------------------------------------------------------------------------
+################################################################################
 
 
-test.utility =
+test.utilityFunctions =
 function()
 {
-    #  emaTA                     Exponential Moving Average
-    #  biasTA                    EMA-Bias
-    #  medpriceTA                Median Price                   
-    #  typicalpriceTA            Typical Price
-    #  wcloseTA                  Weighted Close Price
-    #  rocTA                     Rate of Change
-    #  oscTA                     EMA-Oscillator
-    
-    # UNIT TEST:
-    
-    # Data:
-    URL = "http://localhost/econophysics/R/data/organisations/YAHOO/data/MSFT.CSV"
-    download.file(URL, "MSFT.CSV")
-    X = readSeries("MSFT.CSV")
+    #  emaTA - Exponential Moving Average
+    #  biasTA - EMA-Bias
+    #  medpriceTA - Median Price                   
+    #  typicalpriceTA - Typical Price
+    #  wcloseTA - Weighted Close Price
+    #  rocTA - Rate of Change
+    #  oscTA - EMA-Oscillator
+ 
+    # Data from fEcofin:
+    X = as.timeSeries(data(msft.dat))
     print(head(X))
-    
+
     # Data Records:
     x = close = X[, "Close"]
     high   = X[, "High"]
@@ -126,37 +120,37 @@ function()
     open   = X[, "Open"]
     volume = X[, "Volume"]
     
-    # Exponential Moving Average
+    # Exponential Moving Average:
     TA = emaTA(x, lambda = 0.1, startup = 0)
     dim(TA)
     head(TA)
 
-    # EMA-Bias
+    # EMA-Bias:
     TA = biasTA(x, lag = 5)
     dim(TA)
     head(TA)
     
-    # Median Price
+    # Median Price:
     TA = medpriceTA(high, low)
     dim(TA)
     head(TA)
 
-    # Typical Price
+    # Typical Price:
     TA = typicalpriceTA(high, low, close)
     dim(TA)
     head(TA)
     
-    # Weighted Close Price
+    # Weighted Close Price:
     TA = wcloseTA(high, low, close)
     dim(TA)
     head(TA)
     
-    # Rate of Change
+    # Rate of Change:
     TA = rocTA(x, lag = 5)
     dim(TA)
     head(TA)
     
-    # EMA-Oscillator
+    # EMA-Oscillator:
     TA = oscTA(x, lag1 = 25, lag2 = 65)
     dim(TA)
     head(TA)
@@ -166,25 +160,21 @@ function()
 }
 
 
-# ------------------------------------------------------------------------------
-    
+################################################################################
 
-test.oscillator =
+
+test.oscillatorIndicators =
 function()
 {
-    #  momTA                     Momentum
-    #  macdTA                    MACD
-    #  cdsTA                     MACD Signal Line
-    #  cdoTA                     MACD Oscillator
-    #  vohlTA                    High/Low Volatility
-    #  vorTA                     Volatility Ratio
-    
-    # UNIT TEST:
-    
-    # Data:
-    URL = "http://localhost/econophysics/R/data/organisations/YAHOO/data/MSFT.CSV"
-    download.file(URL, "MSFT.CSV")
-    X = readSeries("MSFT.CSV")
+    #  momTA - Momentum
+    #  macdTA - MACD
+    #  cdsTA - MACD Signal Line
+    #  cdoTA - MACD Oscillator
+    #  vohlTA - High/Low Volatility
+    #  vorTA - Volatility Ratio   
+   
+    # Data from fEcofin:
+    X = as.timeSeries(data(msft.dat))
     print(head(X))
     
     # Data Records:
@@ -194,32 +184,32 @@ function()
     open   = X[, "Open"]
     volume = X[, "Volume"]
 
-    # Momentum
+    # Momentum:
     TA = momTA(x, lag = 5)
     dim(TA)
     head(TA)
     
-    # MACD
+    # MACD:
     TA = macdTA(x, lag1 = 12, lag2 = 26)
     dim(TA)
     head(TA)
     
-    # MACD Signal Line
+    # MACD Signal Line:
     TA = cdsTA(x, lag1 = 12, lag2 = 26, lag3 = 9)
     dim(TA)
     head(TA)
     
-    # MACD Oscillator
+    # MACD Oscillator:
     TA = cdoTA(x, lag1 = 12, lag2 = 26, lag3 = 9)
     dim(TA)
     head(TA)
     
-    # High/Low Volatility
+    # High/Low Volatility:
     TA = vohlTA(high, low)
     dim(TA)
     head(TA)
     
-    # Volatility Ratio
+    # Volatility Ratio:
     TA = vorTA(high, low)
     dim(TA)
     head(TA)
@@ -229,26 +219,22 @@ function()
 } 
 
 
-# ------------------------------------------------------------------------------
+################################################################################
 
 
-test.stochastics =
+test.stochasticsIndicators =
 function()
 {
-    #  stochasticTA              Stochastics %K/%D, fast/slow
-    #  fpkTA                     Fast Percent %K
-    #  fpdTA                     Fast Percent %D
-    #  spdTA                     Slow Percent %D
-    #  apdTA                     Averaged Percent %D
-    #  wprTA                     Williams Percent %R
-    #  rsiTA                     Relative Strength Index
-
-    # UNIT TEST:
+    # stochasticTA - Stochastics %K/%D, fast/slow
+    # fpkTA - Fast Percent %K
+    # fpdTA - Fast Percent %D
+    # spdTA - Slow Percent %D
+    # apdTA - Averaged Percent %D
+    # wprTA - Williams Percent %R
+    # rsiTA - Relative Strength Index
     
-    # Data:
-    URL = "http://localhost/econophysics/R/data/organisations/YAHOO/data/MSFT.CSV"
-    download.file(URL, "MSFT.CSV")
-    X = readSeries("MSFT.CSV")
+    # Data from fEcofin:
+    X = as.timeSeries(data(msft.dat))
     print(head(X))
     
     # Data Records:
@@ -258,13 +244,16 @@ function()
     open   = X[, "Open"]
     volume = X[, "Volume"]
 
-    # Fast Stochstic
+    # Fast Stochstic:
+    # Note, returns a 2-colum series as output ...
     TA = stochasticTA(close, high, low, lag1 = 5, lag2 = 3, type = "fast") 
     dim(TA)
     head(TA, 10)
     
-    # Slow Stochstic
-    TA = stochasticTA(close, high, low, lag1 = 5, lag2 = 3, lag3 = 5, type = "slow") 
+    # Slow Stochstic:
+    # Note, returns a 2-colum series as output ...
+    TA = stochasticTA(close, high, low, lag1 = 5, lag2 = 3, lag3 = 5, 
+        type = "slow") 
     dim(TA)
     head(TA, 10)
 
@@ -303,33 +292,29 @@ function()
 }
 
 
-# ------------------------------------------------------------------------------
+################################################################################
 
 
-test.addons =
+test.moreIndicators =
 function()
 {
-    #  accelTA                   Acceleration
-    #  adiTA                     AD Indicator      
-    #  adoscillatorTA            AD Oscillator
-    #  bollingerTA               Bollinger Bands
-    #  chaikinoTA                Chaikin Oscillator
-    #  chaikinvTA                Chaikin Volatility
-    #  garmanklassTA             Garman-Klass Volatility
-    #  nviTA                     Negative Volume Index
-    #  obvTA                     On Balance Volume
-    #  pviTA                     Positive Volume Index
-    #  pvtrendTA                 Price-Volume Trend
-    #  williamsadTA              Williams AD
-    #  williamsrTA               Williams R%
+    # accelTA - Acceleration
+    # adiTA - AD Indicator      
+    # adoscillatorTA - AD Oscillator
+    # bollingerTA - Bollinger Bands
+    # chaikinoTA - Chaikin Oscillator
+    # chaikinvTA - Chaikin Volatility
+    # garmanklassTA - Garman-Klass Volatility
+    # nviTA - Negative Volume Index
+    # obvTA - On Balance Volume
+    # pviTA - Positive Volume Index
+    # pvtrendTA - Price-Volume Trend
+    # williamsadTA - Williams AD
+    # williamsrTA- Williams R%
     
-    # UNIT TEST:
-    
-    # Data:
-    URL = "http://localhost/econophysics/R/data/organisations/YAHOO/data/MSFT.CSV"
-    download.file(URL, "MSFT.CSV")
-    X = readSeries("MSFT.CSV")
-    print(X)
+    # Data from fEcofin:
+    X = as.timeSeries(data(msft.dat))
+    print(head(X))
     
     x = close = X[, "Close"]
     high   = X[, "High"]
@@ -407,23 +392,20 @@ function()
 }
 
 
-# ------------------------------------------------------------------------------
+################################################################################
 
 
-test.splusLike.MA =
+test.splusLikeIndicators =
 function()
 {    
-    #  SMA                       Computes Simple Moving Average           
-    #  EWMA                      Computes Exponentially Weighted  Moving Average
-
-    # UNIT TEST:
+    # SMA - Computes Simple Moving Average           
+    # EWMA - Computes Exponentially Weighted  Moving Average
     
-    # Data:
-    URL = "http://localhost/econophysics/R/data/organisations/YAHOO/data/MSFT.CSV"
-    download.file(URL, "MSFT.CSV")
-    X = readSeries("MSFT.CSV")
-    print(X)
+    # Data from fEcofin:
+    X = as.timeSeries(data(msft.dat))
+    print(head(X))
     
+    # Data Records:
     x = close = X[, "Close"]
     high   = X[, "High"]
     low    = X[, "Low"]
@@ -435,12 +417,12 @@ function()
     dim(TA) 
     head(TA)
     
-    # EMA:
+    # EMA - Using Decay Length:
     TA = EWMA(x, 25)
     dim(TA)  
     head(TA)
     
-    # EMA:
+    # EMA - Using lambda:
     TA = EWMA(x, 2/(25+1))
     dim(TA)  
     head(TA)
@@ -456,39 +438,70 @@ function()
 test.dailyTA =
 function()
 {    
-    #  .dailyTA                  Computes an indicator for technical analysis
+    # .dailyTA                  
+    #   Computes an indicator for technical analysis
+
+    # Data from fEcofin:
+    X = as.timeSeries(data(msft.dat))
+    print(head(X))  
     
-    # UNIT TEST:
+    # EMA - Daily TA:
+    TA = .dailyTA(X, "ema", select = "Close", lag = 5)
+    head(TA)
+    
+    # MACD - Daily TA:
+    TA = .dailyTA(X, "macd", select = "Close", lag = c(lag1 = 12, lag2 = 26))
+    head(TA)
+    
+    # ...
     
     # Return Value:
     return()  
 }
 
 
-# ------------------------------------------------------------------------------
+# ------------------------------------------------------------------------------ 
+    
 
-
-test.trading =
+test.tradingFunctions =
 function()
 {    
-
-    #  .tradeSignals             Computes trade signals from trading positions
-    #  .tradeLengths             Computes trade length from trading signals
-    #  .hitRate                  Computes hit rates from returns and positions 
+    # .tradeSignals - Computes trade signals from trading positions
+    # .tradeLengths - Computes trade length from trading signals
+    # .hitRate - Computes hit rates from returns and positions
     
-    # UNIT TEST:
+    # Positions:
+    long = +1
+    short = -1
+    neutral = 0
+    tradePositions = c(+1, +1, +1, -1, -1, +1, +1, -1, +1, +1, +1, -1)
+    tradeReturns = rnorm(12)
+    
+    # Compute Trade Signals:
+    Positions = timeSeries(tradePositions, timeCalendar(), units = "Position")
+    Positions
+    tradeSignals = .tradeSignals(Positions)
+    tradeSignals
+    
+    # Compute Trade Lengths:
+    tradeLengths = .tradeLengths(tradeSignals)
+    tradeLengths
+    
+    # Compute Hit Rates:
+    .hitRate(tradeReturns, tradePositions)
     
     # Return Value:
     return()  
 }
 
 
-# ------------------------------------------------------------------------------
+################################################################################
 
 
 if (FALSE) {
     require(RUnit)
-    testResult = runTestFile("C:/Rmetrics/SVN/trunk/fMultivar/test/runit1A.R")
+    testResult = runTestFile("C:/Rmetrics/SVN/trunk/fMultivar/tests/runit1A.R",
+        rngKind = "Marsaglia-Multicarry", rngNormalKind = "Inversion")
     printTextProtocol(testResult)
 }
    

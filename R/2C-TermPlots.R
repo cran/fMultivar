@@ -16,7 +16,7 @@
 
 # Copyrights (C)
 # for this R-port: 
-#   1999 - 2006, Diethelm Wuertz, GPL
+#   1999 - 2007, Diethelm Wuertz, GPL
 #   Diethelm Wuertz <wuertz@itp.phys.ethz.ch>
 #   info@rmetrics.org
 #   www.rmetrics.org
@@ -37,7 +37,13 @@
 
 .termPlot =
 function(object, terms = NULL)
-{   # A function Implemented by Diethelm Wuertz
+{   # A function implemented by Diethelm Wuertz
+
+    # Description:
+    
+    # Arguments:
+    #   object -
+    #   terms -
 
     # FUNCTION:
     
@@ -92,8 +98,15 @@ function(object, terms = NULL)
 
 .termPersp =
 function(object, terms = NULL, gridPoints = 25)
-{   # A function Implemented by Diethelm Wuertz
+{   # A function implemented by Diethelm Wuertz
 
+    # Description:
+    
+    # Arguments:
+    #   object -
+    #   terms -
+    #   gridPoints -
+    
     # FUNCTION:
     
     # Settings:
@@ -146,8 +159,15 @@ function(object, terms = NULL, gridPoints = 25)
 
 .termContour =
 function(object, terms = NULL, gridPoints = 25)
-{   # A function Implemented by Diethelm Wuertz
+{   # A function implemented by Diethelm Wuertz
 
+    # Description:
+    
+    # Arguments:
+    #   object -
+    #   terms -
+    #   gridPoints -
+    
     # FUNCTION:
     
     # Settings:

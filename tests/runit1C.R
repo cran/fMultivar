@@ -16,7 +16,7 @@
 
 # Copyrights (C)
 # for this R-port: 
-#  1999 - 2004, Diethelm Wuertz, GPL
+#  1999 - 2007, Diethelm Wuertz, GPL
 #  Diethelm Wuertz <wuertz@itp.phys.ethz.ch>
 #  info@rmetrics.org
 #  www.rmetrics.org
@@ -37,15 +37,14 @@
 ################################################################################
 
 
-### Uncomplete - Under Development ###
-
-
-test.helpFile = 
+test.aaa = 
 function()
 {
     # Help File:
     helpFile = function() { 
-        example(RollingAnalysis); return() }
+        example(RollingAnalysis, ask = FALSE)
+        return() 
+    }
     checkIdentical(
         target = class(try(helpFile())),
         current = "NULL")
@@ -55,13 +54,13 @@ function()
 }
 
 
-# ------------------------------------------------------------------------------
+################################################################################
 
 
 test.rollingVector =
 function()
 {
-    # .roll.RUnit()
+    # Period:
     n = 3
         
     # TRIM = TRUE | na.rm = TRUE
@@ -86,7 +85,7 @@ function()
     # Max:
     ans = rollFun(x, n = n, trim = trim, na.rm = na.rm, FUN = max)
     print(ans)   
-    
+        
     # TRIM = TRUE | na.rm = FALSE
     trim = TRUE
     na.rm = FALSE
@@ -109,7 +108,7 @@ function()
     # Max:
     ans = rollFun(x, n = n, trim = trim, na.rm = na.rm, FUN = max)
     print(ans)
-     
+         
     # TRIM = FALSE | na.rm = TRUE
     trim = FALSE
     na.rm = TRUE
@@ -132,7 +131,7 @@ function()
     # Max:
     ans = rollFun(x, n = n, trim = trim, na.rm = na.rm, FUN = max)
     print(ans)  
-    
+       
     # TRIM = FALSE | na.rm = FALSE
     trim = FALSE
     na.rm = FALSE
@@ -155,7 +154,7 @@ function()
     # Max:
     ans = rollFun(x, n = n, trim = trim, na.rm = na.rm, FUN = max)
     print(ans)
-    
+       
     # Return Value:
     return()    
 }
@@ -174,9 +173,9 @@ function()
         FinCenter = "GMT") 
     print(ts)
     
-    # .roll.RUnit()
+    # Period:
     n = 3
-    
+
     # TRIM = TRUE | na.rm = TRUE
     trim = TRUE
     na.rm = TRUE
@@ -199,7 +198,7 @@ function()
     # Max:
     ans = rollFun(x, n = n, trim = trim, na.rm = na.rm, FUN = max)
     print(ans)   
-    
+        
     # TRIM = TRUE | na.rm = FALSE
     trim = TRUE
     na.rm = FALSE
@@ -222,7 +221,7 @@ function()
     # Max:
     ans = rollFun(x, n = n, trim = trim, na.rm = na.rm, FUN = max)
     print(ans)
-     
+        
     # TRIM = FALSE | na.rm = TRUE
     trim = FALSE
     na.rm = TRUE
@@ -245,7 +244,7 @@ function()
     # Max:
     ans = rollFun(x, n = n, trim = trim, na.rm = na.rm, FUN = max)
     print(ans)  
-    
+        
     # TRIM = FALSE | na.rm = FALSE
     trim = FALSE
     na.rm = FALSE
@@ -268,19 +267,19 @@ function()
     # Max:
     ans = rollFun(x, n = n, trim = trim, na.rm = na.rm, FUN = max)
     print(ans)
-        
+           
     # Return Value:
     return()  
 }
 
 
-
-# ------------------------------------------------------------------------------
+################################################################################
 
 
 if (FALSE) {
     require(RUnit)
-    testResult = runTestFile("C:/Rmetrics/SVN/trunk/fMultivar/test/runit1C.R")
+    testResult = runTestFile("C:/Rmetrics/SVN/trunk/fMultivar/tests/runit1C.R",
+        rngKind = "Marsaglia-Multicarry", rngNormalKind = "Inversion")
     printTextProtocol(testResult)
 }
    

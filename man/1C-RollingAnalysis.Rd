@@ -15,8 +15,8 @@
 
     A collection and description of functions 
     to perform a rolling analysis. A rolling 
-    analysis is often required in building trading 
-    models.
+    analysis is often required in building 
+    trading models.
     \cr
         
     The functions are:
@@ -92,13 +92,6 @@ rollVar(x, n = 9, trim = TRUE, unbiased = TRUE, na.rm = FALSE)
 }
 
 
-\author{
-
-    Diethelm Wuertz for the Rmetrics \R-port.
-    
-}
-
-
 \seealso{
 
     \code{\link{var}}.
@@ -106,9 +99,14 @@ rollVar(x, n = 9, trim = TRUE, unbiased = TRUE, na.rm = FALSE)
 }
 
 
-\examples{
-## SOURCE("fMultivar.1C-RollingAnalysis")
+\author{
 
+    Diethelm Wuertz for the Rmetrics \R-port.
+    
+}
+
+
+\examples{
 ## Rolling Analysis:
    x = (1:10)^2
    x

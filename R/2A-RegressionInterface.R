@@ -16,7 +16,7 @@
 
 # Copyrights (C)
 # for this R-port: 
-#   1999 - 2004, Diethelm Wuertz, GPL
+#   1999 - 2007, Diethelm Wuertz, GPL
 #   Diethelm Wuertz <wuertz@itp.phys.ethz.ch>
 #   info@rmetrics.org
 #   www.rmetrics.org
@@ -32,7 +32,7 @@
 #  'fREG'                S4 Class Representation
 #  regSim                Returns a regression example data set
 #  regFit                Wrapper Function for Regression Models
-#  gregFit                Wrapper Function for Generalized Regression Models
+#  gregFit               Wrapper Function for Generalized Regression Models
 #  .lmFit                 Linear Regression Model
 #  .rlmFit                Robust Linear Regression Model
 #  .glmFit                Generalized Linear Model
@@ -102,9 +102,9 @@
 #   polymars*   polspline   -       xx     x         -         x
 #   nnet        nnet        x       -      x         x         x
 #
-#   *BUILTIN
+#   *BUILTIN:
 #    mda        Mixture and flexible discriminant analysis
-#    polspline  Polynomial spline routines
+#    polspline  required!
 #   *IMPORTANT NOTE:
 #    Both packages r-cran-mda and r-cran-polspline are not available on the
 #    Debian Server, therefore we made them accessible as Builtin functions
@@ -124,23 +124,6 @@
 #  Depends: class, R (>= 1.5.0)
 #  License: GPL version 2
 #  Packaged: Sat Jan 31 13:31:19 2004; hornik
-################################################################################
-
-
-################################################################################
-# BUILTIN - PACKAGE DESCRIPTION:
-#  Package: polspline
-#  Version: 1.0.5
-#  Date: 2004-04-22
-#  Title: Polynomial spline routines
-#  Author: Charles Kooperberg <clk@fhcrc.org>
-#  Maintainer: Charles Kooperberg <clk@fhcrc.org>
-#  Depends: R
-#  Description: Routines for the polynomial spline fitting routines
-#    hazard regression, hazard estimation with flexible tails, logspline,
-#    lspec, polyclass, and polymars, by C. Kooperberg and co-authors
-#  License: GPL version 2 or newer
-#  Packaged: Thu Apr 22 13:59:50 2004; hornik
 ################################################################################
 
 
@@ -232,9 +215,37 @@ function(model = c("LM3", "LOGIT3", "GAM3"), n = 100)
 # ------------------------------------------------------------------------------
 
 
+.amFormula =
+function(formula)
+{
+    # Description:
+    #   Adds s() around term labels
+    
+    # FUNCTION:
+    
+    TF = terms(formula)
+    attTF = attr(TF, "term.labels")
+    newF = NULL
+    for (i in 1:length(attTF)) {
+        addF = paste(" s(", attTF[i], ") ", sep = "")
+        newF = paste(newF, addF, sep = "+")
+    }
+    newF = substr(newF, 3, 99)
+    if (attr(TF, "intercept") == 0) newF = paste(newF, "- 1", sep = "")
+    newF = paste("~", newF)
+    if (attr(TF, "response") == 1) newF = paste(as.character(formula)[2], newF)
+    
+    # Return Value:
+    as.formula(newF)
+}
+
+
+# ------------------------------------------------------------------------------
+
+
 regFit = 
 function (formula, data,
-use = c("lm", "rlm", "am", "ppr", "mars", "polymars", "nnet"), 
+use = c("lm", "rlm", "am", "ppr", "mars", "nnet", "polymars"), 
 title = NULL, description = NULL, ...) 
 {   # A function implemented by Diethelm Wuertz
 
@@ -263,11 +274,18 @@ title = NULL, description = NULL, ...)
     
     # Trace:
     trace = FALSE
-    
+   
     # Get Method:
-    if (!(class(data) == "timeSeries")) data = as.timeSeries(data)
+    if (!(class(data) == "timeSeries")) {
+        data = as.timeSeries(data, silent = TRUE)
+    }
+    
+    # Function to be called:
     fun = use = match.arg(use)
-    if (use == "am") fun = "gam"
+    if (use == "am") {
+        fun = "gam"
+        formula = .amFormula(formula)
+    }
     if (use == "mars") fun = ".mars"
     if (use == "polymars") fun = ".polymars"
 
@@ -351,7 +369,7 @@ title = NULL, description = NULL, ...)
 {   # A function implemented by Diethelm Wuertz
 
     # Description:
-    #   Common function call for several selected regression models.
+    #   Common function call for generalized regression models.
     
     # Details:
     #   This is a wrapper function for the following regrssion models:
@@ -411,8 +429,8 @@ title = NULL, description = NULL, ...)
 # ------------------------------------------------------------------------------
 
 
-print.fREG = 
-function(x, ...)
+show.fREG = 
+function(object)
 {   # A function implemented by Diethelm Wuertz
 
     # Description:
@@ -421,7 +439,7 @@ function(x, ...)
     # FUNCTION:
     
     # Settings:
-    object = x
+    object
     
     # Title:
     cat("\nTitle:\n ")
@@ -523,7 +541,13 @@ function(x, ...)
         
     # Return Value:
     invisible()
-}            
+}   
+
+
+# ------------------------------------------------------------------------------
+
+
+setMethod("show", "fREG", show.fREG)         
     
 
 # ------------------------------------------------------------------------------
@@ -571,7 +595,7 @@ function(x, which = "ask", ...)
     # 8. Negative Mean Excess Plot"
     .plot1 <<- function(x, ...) .responsesPlot(residuals(x)+fitted(x),fitted(x))
     .plot2 <<- function(x, ...) .residualsPlot(residuals(x))    
-    .plot3 <<- function(x, ...) .qqbayesPlot(residuals(x))
+    .plot3 <<- function(x, ...) qqnormPlot(residuals(x))
     .plot4 <<- function(x, ...) .firePlot(fitted(x), residuals(x)) 
     .plot5 <<- function(x, ...) .acfPlot(residuals(x))
     .plot6 <<- function(x, ...) .pacfPlot(residuals(x))
@@ -629,7 +653,7 @@ function(x, which = "ask", ...)
     # 4. Fitted Values vs. Residuals Plot:
     .plot1 <<- function(x, ...) .responsesPlot(residuals(x)+fitted(x),fitted(x))
     .plot2 <<- function(x, ...) .residualsPlot(residuals(x))    
-    .plot3 <<- function(x, ...) .qqbayesPlot(residuals(x))
+    .plot3 <<- function(x, ...) qqnormPlot(residuals(x))
     .plot4 <<- function(x, ...) .firePlot(fitted(x), residuals(x)) 
     .plot5 <<- function(x, ...) .acfPlot(residuals(x))
     .plot6 <<- function(x, ...) .pacfPlot(residuals(x))
@@ -1440,7 +1464,6 @@ ts.weights, classify, factors, tolerance = 1e-06, verbose = FALSE)
     # FUNCTION:
     
     # require(polspline)
-    require(polspline)
     
     # Fit:
     .Call <- match.call()

@@ -1,6 +1,6 @@
-\name{RegressionModelling}
+\name{RegressionInterface}
 
-\alias{RegressionModelling}
+\alias{RegressionInterface}
 
 \alias{fREG}
 \alias{fREG-class}
@@ -11,7 +11,8 @@
 
 \alias{predict.fREG}
 
-\alias{print.fREG}
+\alias{show.fREG}
+\alias{show,fREG-method}
 \alias{plot.fREG}
 \alias{summary.fREG}
 
@@ -31,11 +32,11 @@
 
 \description{
 
-    A collection and description of easy to use functions to perform 
-    an univariate regression analysis from several methods, to analyse 
-    and summarize the fit, and to predict for new data records. This 
-    wrapper was mainly build for multivariate financial time series 
-    analysis.
+    A collection and description of easy to use 
+    functions to perform an univariate regression 
+    analysis from several methods, to analyse and 
+    summarize the fit, and to predict for new 
+    data records.
     \cr
     
     The models include:
@@ -48,8 +49,6 @@
     \code{"MARS"} \tab Multivariate Adaptive Regression Splines, \cr
     \code{"POLYMARS"} \tab Polytochomous MARS, and \cr
     \code{"NNET"} \tab Feedforward Neural Network Modelling. }
-    
-    Note, \code{"POLYMARS"} requires contributed package \code{"polspline"}
             
     Available methods are:
     
@@ -81,6 +80,9 @@
     
 
 \note{  
+    
+    Note, \code{"POLYMARS"} requires contributed package \code{"polspline"}
+    \cr
     
     This \code{regFit} function offers for several regression models
     an easy to use wrapper. There is nothing really new in this package. 
@@ -125,14 +127,14 @@
 \usage{
 regSim(model = c("LM3", "LOGIT3", "GAM3"), n = 100)
 
-regFit(formula, data, use = c("lm", "rlm", "am", "ppr", "mars", "polymars", 
-    "nnet"), title = NULL, description = NULL, \dots)
+regFit(formula, data, use = c("lm", "rlm", "am", "ppr", "mars", "nnet", 
+    "polymars"), title = NULL, description = NULL, \dots)
 gregFit(formula, family, data, use = c("glm", "gam"), 
     title = NULL, description = NULL, \dots)
     
 \method{predict}{fREG}(object, newdata, se.fit = FALSE, type = "response", \dots)
 
-\method{print}{fREG}(x, \dots)
+show.fREG(object)
 \method{plot}{fREG}(x, \dots)
 \method{summary}{fREG}(object, \dots)
 
@@ -225,10 +227,6 @@ OLS(formula, data, \dots)
     \item{type}{
         a character string, the type of prediction.
         }
-    %\item{weights}{
-    %    a vector of weights. If set to \code{NULL} all weights are
-    %    set to unity, the default value.
-    %    }
     \item{\dots}{
         additional optional arguments to be passed to the underlying 
         functions. For details we refer to inspect the following help 
@@ -593,20 +591,6 @@ OLS(formula, data, \dots)
 }
 
 
-\author{
-
-    The R core team for the \code{lm} functions from R's \code{base} package, \cr
-    B.R. Ripley for the \code{glm} functions from R's \code{base} package, \cr
-    S.N. Wood for the \code{gam} functions from R's \code{mgcv} package, \cr
-    N.N. for the \code{ppr} functions from R's \code{modreg} package, \cr
-    T. Hastie, R. Tibshirani for the \code{mars} functions from R's \code{?} package, \cr
-    M. O' Connors for the \code{polymars} functions from R's \code{?} package, \cr
-    The R core team for the \code{nnet} functions from R's \code{nnet} package, \cr
-    Diethelm Wuertz for the Rmetrics \R-port.
-
-}
-
-
 \references{
 
 Belsley D.A., Kuh E., Welsch R.E. (1980);
@@ -706,8 +690,21 @@ Wood (2001);
 }
 
 
+\author{
+
+    The R core team for the \code{lm} functions from R's \code{base} package, \cr
+    B.R. Ripley for the \code{glm} functions from R's \code{base} package, \cr
+    S.N. Wood for the \code{gam} functions from R's \code{mgcv} package, \cr
+    N.N. for the \code{ppr} functions from R's \code{modreg} package, \cr
+    T. Hastie, R. Tibshirani for the \code{mars} functions from R's \code{?} package, \cr
+    M. O' Connors for the \code{polymars} functions from R's \code{?} package, \cr
+    The R core team for the \code{nnet} functions from R's \code{nnet} package, \cr
+    Diethelm Wuertz for the Rmetrics \R-port.
+
+}
+
+
 \examples{
-## SOURCE("fMultivar.2A-RegressionModelling")
 \dontrun{
 ## regFit -
    data(recession) 
@@ -723,7 +720,7 @@ Wood (2001);
      inSample = as.vector(in.sample)
      plot(Date, Recession, type = "n", main = "US Recession")
      grid()
-     lines(Date, Recession, type = "h", col = "steelblue3")
+     lines(Date, Recession, type = "h", col = "steelblue")
      lines(Date, inSample) 
    }
    

@@ -16,7 +16,7 @@
 
 # Copyrights (C)
 # for this R-port: 
-#   1999 - 2004, Diethelm Wuertz, GPL
+#   1999 - 2007, Diethelm Wuertz, GPL
 #   Diethelm Wuertz <wuertz@itp.phys.ethz.ch>
 #   info@rmetrics.org
 #   www.rmetrics.org
@@ -31,11 +31,23 @@
 
 
 if (FALSE) {
+    
+    # Settings:
+    require(fMultivar)
     require(RUnit)
-    testIndex = c("1A", "1B", "1C", "2A", "2B", "2C", "3A", "3B", "6A",
-        "6C", "7A", "7B")   #, "Demo")
-    File = "C:/Rmetrics/SVN/trunk/fMultivar/test/runit"
-    Protocol = "runitMultivar.txt"
+    testIndex = c( 
+        "1A", # Technical Analysis
+        "1B", # BenchmarkAnalysis
+        "1C", # Rolling Analysis
+      # "2A", # RegressionInterface
+        "2B", # RegressionTestsInterface
+        "2C", # TermPlots
+        "7A", # BivariateTools
+        "7B") # MultivariateDistribution
+    File = "C:/Rmetrics/SVN/trunk/fMultivar/tests/runit"
+    Protocol = "runitfMultivar.txt"
+    
+    # Perform and Save all Unit Tests:
     write("fMultivar:", file = Protocol)
     for (Index in testIndex) {
         file = paste(File, Index, ".R", sep = "")
@@ -46,8 +58,10 @@ if (FALSE) {
             file = Protocol, append = TRUE)
     } 
      
+    # Show Protocol:
     TXT = scan(Protocol, character(), blank.lines.skip = FALSE, sep = "\n")
     cat(TXT, sep = "\n")
+    
 }
 
 

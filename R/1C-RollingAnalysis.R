@@ -16,7 +16,7 @@
 
 # Copyrights (C)
 # for this R-port: 
-#   1999 - 2006, Diethelm Wuertz, GPL
+#   1999 - 2007, Diethelm Wuertz, GPL
 #   Diethelm Wuertz <wuertz@itp.phys.ethz.ch>
 #   info@rmetrics.org
 #   www.rmetrics.org
@@ -69,7 +69,6 @@ function(x, n, trim = TRUE, na.rm = FALSE, FUN, ...)
     if (TS) {
         positions = x.orig@positions
         x = x.orig@Data[, 1]
-        
     } else {
         x = as.vector(x.orig)
         names(x) = NULL
@@ -110,7 +109,7 @@ function(x, n, trim = TRUE, na.rm = FALSE, FUN, ...)
             units = x.orig@units, FinCenter = x.orig@FinCenter)
     }
     
-    # Return value:
+    # Return Value:
     ans
 }
 
