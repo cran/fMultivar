@@ -1,13 +1,4 @@
 
-#*******************************************************************************
-# fMultivar - A SOFTWARE COLLECTION FOR FINANCIAL ENGINEERS
-# Multivariate Financial Markets Analysis
-#
-# collected by Diethelm Wuertz
-# Version 0.9
-#*******************************************************************************
-
-
 # This library is free software; you can redistribute it and/or
 # modify it under the terms of the GNU Library General Public
 # License as published by the Free Software Foundation; either
@@ -25,7 +16,7 @@
 
 # Copyrights (C)
 # for this R-port: 
-#   1999 - 2005, Diethelm Wuertz, GPL
+#   1999 - 2004, Diethelm Wuertz, GPL
 #   Diethelm Wuertz <wuertz@itp.phys.ethz.ch>
 #   info@rmetrics.org
 #   www.rmetrics.org
@@ -37,20 +28,6 @@
 
 
 ################################################################################
-
-
-.First.lib = 
-function(lib, pkg)
-{   # A function implemented by Diethelm Wuertz
-    
-    # Package:
-    cat("\nRmetrics, (C) 1999-2005, Diethelm Wuertz, GPL")
-    cat("\nfMultivariate: Multivariate Financial Markets Analysis\n")
-
-    # Load dll:
-    library.dynam("fMultivar", pkg, lib)
-}
-
-
+#
 ################################################################################
 

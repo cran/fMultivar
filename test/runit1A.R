@@ -1,0 +1,497 @@
+
+# This library is free software; you can redistribute it and/or
+# modify it under the terms of the GNU Library General Public
+# License as published by the Free Software Foundation; either
+# version 2 of the License, or (at your option) any later version.
+#
+# This library is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+# GNU Library General Public License for more details.
+#
+# You should have received a copy of the GNU Library General
+# Public License along with this library; if not, write to the
+# Free Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+# MA  02111-1307  USA
+
+# Copyrights (C)
+# for this R-port: 
+#   1999 - 2006, Diethelm Wuertz, GPL
+#   Diethelm Wuertz <wuertz@itp.phys.ethz.ch>
+#   info@rmetrics.org
+#   www.rmetrics.org
+# for the code accessed (or partly included) from other R-ports:
+#   see R's copyright and license files
+# for the code accessed (or partly included) from contributed R-ports
+# and other sources
+#   see Rmetrics's copyright file
+
+
+################################################################################
+# FUNCTION:                 DESCRIPTION - UTILITY FUNCTIONS:
+#  emaTA                     Exponential Moving Average
+#  biasTA                    EMA-Bias
+#  medpriceTA                Median Price                   
+#  typicalpriceTA            Typical Price
+#  wcloseTA                  Weighted Close Price
+#  rocTA                     Rate of Change
+#  oscTA                     EMA-Oscillator
+# FUNCTION:                 OSCILLATOR INDICATORS:
+#  momTA                     Momentum
+#  macdTA                    MACD
+#  cdsTA                     MACD Signal Line
+#  cdoTA                     MACD Oscillator
+#  vohlTA                    High/Low Volatility
+#  vorTA                     Volatility Ratio
+# FUNCTION:                 STOCHASTICS INDICATORS:
+#  stochasticTA              Stochastics %K/%D, fast/slow
+#  fpkTA                     Fast Percent %K
+#  fpdTA                     Fast Percent %D
+#  spdTA                     Slow Percent %D
+#  apdTA                     Averaged Percent %D
+#  wprTA                     Williams Percent %R
+#  rsiTA                     Relative Strength Index
+# FUNCTION:                 DESCRIPTION - MORE INDICATORS:
+#  accelTA                   Acceleration
+#  adiTA                     AD Indicator      
+#  adoscillatorTA            AD Oscillator
+#  bollingerTA               Bollinger Bands
+#  chaikinoTA                Chaikin Oscillator
+#  chaikinvTA                Chaikin Volatility
+#  garmanklassTA             Garman-Klass Volatility
+#  nviTA                     Negative Volume Index
+#  obvTA                     On Balance Volume
+#  pviTA                     Positive Volume Index
+#  pvtrendTA                 Price-Volume Trend
+#  williamsadTA              Williams AD
+#  williamsrTA               Williams R%
+# FUNCTION:                 SPLUS LIKE MOVING AVERAGES:
+#  SMA                       Computes Simple Moving Average           
+#  EWMA                      Computes Exponentially Weighted  Moving Average
+# FUNCTION:                 DESCRIPTION:
+#  .dailyTA                  Computes an indicator for technical analysis
+# FUNCTION:                 DESCRIPTION:
+#  .tradeSignals             Computes trade signals from trading positions
+#  .tradeLengths             Computes trade length from trading signals
+#  .hitRate                  Computes hit rates from returns and positions
+################################################################################
+
+
+### Uncomplete - Under Development ###
+
+
+test.helpFile = 
+function()
+{
+    # UNIT TEST:
+    
+    # Help File:
+    helpFile = function() { 
+        example(TechnicalAnalysis); return() }
+    checkIdentical(
+        target = class(try(helpFile())),
+        current = "NULL")
+
+    # Return Value:
+    return()    
+}
+
+
+# ------------------------------------------------------------------------------
+
+
+test.utility =
+function()
+{
+    #  emaTA                     Exponential Moving Average
+    #  biasTA                    EMA-Bias
+    #  medpriceTA                Median Price                   
+    #  typicalpriceTA            Typical Price
+    #  wcloseTA                  Weighted Close Price
+    #  rocTA                     Rate of Change
+    #  oscTA                     EMA-Oscillator
+    
+    # UNIT TEST:
+    
+    # Data:
+    URL = "http://localhost/econophysics/R/data/organisations/YAHOO/data/MSFT.CSV"
+    download.file(URL, "MSFT.CSV")
+    X = readSeries("MSFT.CSV")
+    print(head(X))
+    
+    # Data Records:
+    x = close = X[, "Close"]
+    high   = X[, "High"]
+    low    = X[, "Low"]
+    open   = X[, "Open"]
+    volume = X[, "Volume"]
+    
+    # Exponential Moving Average
+    TA = emaTA(x, lambda = 0.1, startup = 0)
+    dim(TA)
+    head(TA)
+
+    # EMA-Bias
+    TA = biasTA(x, lag = 5)
+    dim(TA)
+    head(TA)
+    
+    # Median Price
+    TA = medpriceTA(high, low)
+    dim(TA)
+    head(TA)
+
+    # Typical Price
+    TA = typicalpriceTA(high, low, close)
+    dim(TA)
+    head(TA)
+    
+    # Weighted Close Price
+    TA = wcloseTA(high, low, close)
+    dim(TA)
+    head(TA)
+    
+    # Rate of Change
+    TA = rocTA(x, lag = 5)
+    dim(TA)
+    head(TA)
+    
+    # EMA-Oscillator
+    TA = oscTA(x, lag1 = 25, lag2 = 65)
+    dim(TA)
+    head(TA)
+    
+    # Return Value
+    return()
+}
+
+
+# ------------------------------------------------------------------------------
+    
+
+test.oscillator =
+function()
+{
+    #  momTA                     Momentum
+    #  macdTA                    MACD
+    #  cdsTA                     MACD Signal Line
+    #  cdoTA                     MACD Oscillator
+    #  vohlTA                    High/Low Volatility
+    #  vorTA                     Volatility Ratio
+    
+    # UNIT TEST:
+    
+    # Data:
+    URL = "http://localhost/econophysics/R/data/organisations/YAHOO/data/MSFT.CSV"
+    download.file(URL, "MSFT.CSV")
+    X = readSeries("MSFT.CSV")
+    print(head(X))
+    
+    # Data Records:
+    x = close = X[, "Close"]
+    high   = X[, "High"]
+    low    = X[, "Low"]
+    open   = X[, "Open"]
+    volume = X[, "Volume"]
+
+    # Momentum
+    TA = momTA(x, lag = 5)
+    dim(TA)
+    head(TA)
+    
+    # MACD
+    TA = macdTA(x, lag1 = 12, lag2 = 26)
+    dim(TA)
+    head(TA)
+    
+    # MACD Signal Line
+    TA = cdsTA(x, lag1 = 12, lag2 = 26, lag3 = 9)
+    dim(TA)
+    head(TA)
+    
+    # MACD Oscillator
+    TA = cdoTA(x, lag1 = 12, lag2 = 26, lag3 = 9)
+    dim(TA)
+    head(TA)
+    
+    # High/Low Volatility
+    TA = vohlTA(high, low)
+    dim(TA)
+    head(TA)
+    
+    # Volatility Ratio
+    TA = vorTA(high, low)
+    dim(TA)
+    head(TA)
+    
+    # Return Value:
+    return()    
+} 
+
+
+# ------------------------------------------------------------------------------
+
+
+test.stochastics =
+function()
+{
+    #  stochasticTA              Stochastics %K/%D, fast/slow
+    #  fpkTA                     Fast Percent %K
+    #  fpdTA                     Fast Percent %D
+    #  spdTA                     Slow Percent %D
+    #  apdTA                     Averaged Percent %D
+    #  wprTA                     Williams Percent %R
+    #  rsiTA                     Relative Strength Index
+
+    # UNIT TEST:
+    
+    # Data:
+    URL = "http://localhost/econophysics/R/data/organisations/YAHOO/data/MSFT.CSV"
+    download.file(URL, "MSFT.CSV")
+    X = readSeries("MSFT.CSV")
+    print(head(X))
+    
+    # Data Records:
+    x = close = X[, "Close"]
+    high   = X[, "High"]
+    low    = X[, "Low"]
+    open   = X[, "Open"]
+    volume = X[, "Volume"]
+
+    # Fast Stochstic
+    TA = stochasticTA(close, high, low, lag1 = 5, lag2 = 3, type = "fast") 
+    dim(TA)
+    head(TA, 10)
+    
+    # Slow Stochstic
+    TA = stochasticTA(close, high, low, lag1 = 5, lag2 = 3, lag3 = 5, type = "slow") 
+    dim(TA)
+    head(TA, 10)
+
+    # Fast Percent K:
+    TA = fpkTA(close, high, low, lag = 5)  
+    dim(TA)
+    head(TA,10)
+    
+    # Fast Percent D:
+    TA = fpdTA(close, high, low, lag1 = 5, lag2 = 3)
+    dim(TA)
+    head(TA, 10)
+    
+    # Slow Percent %D
+    TA = spdTA(close, high, low, lag1 = 5, lag2 = 3, lag3 = 9)
+    dim(TA)
+    head(TA, 10)
+    
+    # Averaged Percent %D
+    TA = apdTA(close, high, low, lag1 = 5, lag2 = 3, lag3 = 9, lag4 = 9)
+    dim(TA)
+    head(TA, 10)
+    
+    # Williams Percent %R
+    TA = wprTA(close, high, low, lag = 5)
+    dim(TA)
+    head(TA, 10)
+    
+    # Relative Strength Index
+    TA = rsiTA(close, lag = 14)
+    dim(TA)
+    head(TA, 10)
+    
+    # Return Value:
+    return()       
+}
+
+
+# ------------------------------------------------------------------------------
+
+
+test.addons =
+function()
+{
+    #  accelTA                   Acceleration
+    #  adiTA                     AD Indicator      
+    #  adoscillatorTA            AD Oscillator
+    #  bollingerTA               Bollinger Bands
+    #  chaikinoTA                Chaikin Oscillator
+    #  chaikinvTA                Chaikin Volatility
+    #  garmanklassTA             Garman-Klass Volatility
+    #  nviTA                     Negative Volume Index
+    #  obvTA                     On Balance Volume
+    #  pviTA                     Positive Volume Index
+    #  pvtrendTA                 Price-Volume Trend
+    #  williamsadTA              Williams AD
+    #  williamsrTA               Williams R%
+    
+    # UNIT TEST:
+    
+    # Data:
+    URL = "http://localhost/econophysics/R/data/organisations/YAHOO/data/MSFT.CSV"
+    download.file(URL, "MSFT.CSV")
+    X = readSeries("MSFT.CSV")
+    print(X)
+    
+    x = close = X[, "Close"]
+    high   = X[, "High"]
+    low    = X[, "Low"]
+    open   = X[, "Open"]
+    volume = X[, "Volume"]
+    
+    # Acceleration
+    TA = accelTA(x, n = 3)
+    dim(TA)
+    head(TA, 10)
+
+    # AD Indicator  
+    TA = adiTA(high, low, close, volume)
+    dim(TA)
+    head(TA, 10)
+    
+    # AD Oscillator
+    TA = adoscillatorTA(open, high, low, close)
+    dim(TA)
+    head(TA, 10)
+    
+    # Bollinger Bands
+    TA = bollingerTA(x, lag = 5, n.sd = 2)
+    dim(TA)
+    head(TA, 10)
+     
+    # Chaikin Oscillator
+    TA = chaikinoTA(high, low, close, volume, lag1 = 10, lag2 = 3)
+    dim(TA)
+    head(TA, 10)
+     
+    # Chaikin Volatility
+    TA = chaikinvTA(high, low, lag1 = 5, lag2 = 5) 
+    dim(TA)
+    head(TA, 10)
+     
+    # Garman-Klass Volatility
+    TA = garmanklassTA(open, high, low, close)
+    dim(TA)
+    head(TA, 10)
+     
+    # Negative Volume Index
+    TA = nviTA(close, volume) 
+    dim(TA)
+    head(TA, 10)        
+        
+    # On Balance Volume
+    TA = obvTA(close, volume) 
+    dim(TA)
+    head(TA, 10)
+     
+    # Positive Volume Index
+    TA = pviTA(close, volume)
+    dim(TA)
+    head(TA, 10)
+     
+    # Price-Volume Trend
+    TA = pvtrendTA(close, volume)
+    dim(TA)
+    head(TA, 10)
+     
+    # Williams AD
+    TA = williamsadTA(high, low, close)
+    dim(TA)
+    head(TA, 10)
+    
+    # Williams R%
+    TA = williamsrTA(high, low, close, lag = 5) 
+    dim(TA)
+    head(TA, 10)     
+    
+    # Return Value:
+    return()       
+}
+
+
+# ------------------------------------------------------------------------------
+
+
+test.splusLike.MA =
+function()
+{    
+    #  SMA                       Computes Simple Moving Average           
+    #  EWMA                      Computes Exponentially Weighted  Moving Average
+
+    # UNIT TEST:
+    
+    # Data:
+    URL = "http://localhost/econophysics/R/data/organisations/YAHOO/data/MSFT.CSV"
+    download.file(URL, "MSFT.CSV")
+    X = readSeries("MSFT.CSV")
+    print(X)
+    
+    x = close = X[, "Close"]
+    high   = X[, "High"]
+    low    = X[, "Low"]
+    open   = X[, "Open"]
+    volume = X[, "Volume"]
+    
+    # SMA:
+    TA = SMA(x, n = 5)
+    dim(TA) 
+    head(TA)
+    
+    # EMA:
+    TA = EWMA(x, 25)
+    dim(TA)  
+    head(TA)
+    
+    # EMA:
+    TA = EWMA(x, 2/(25+1))
+    dim(TA)  
+    head(TA)
+    
+    # Return Value:
+    return()  
+}
+
+
+# ------------------------------------------------------------------------------
+
+
+test.dailyTA =
+function()
+{    
+    #  .dailyTA                  Computes an indicator for technical analysis
+    
+    # UNIT TEST:
+    
+    # Return Value:
+    return()  
+}
+
+
+# ------------------------------------------------------------------------------
+
+
+test.trading =
+function()
+{    
+
+    #  .tradeSignals             Computes trade signals from trading positions
+    #  .tradeLengths             Computes trade length from trading signals
+    #  .hitRate                  Computes hit rates from returns and positions 
+    
+    # UNIT TEST:
+    
+    # Return Value:
+    return()  
+}
+
+
+# ------------------------------------------------------------------------------
+
+
+if (FALSE) {
+    require(RUnit)
+    testResult = runTestFile("C:/Rmetrics/SVN/trunk/fMultivar/test/runit1A.R")
+    printTextProtocol(testResult)
+}
+   
+
+################################################################################
+    

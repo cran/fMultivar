@@ -1,13 +1,4 @@
 
-#*******************************************************************************
-# fMultivar - A SOFTWARE COLLECTION FOR FINANCIAL ENGINEERS
-# Multivariate Financial Markets Analysis
-#
-# collected by Diethelm Wuertz
-# Version 0.9
-#*******************************************************************************
-
-
 # This library is free software; you can redistribute it and/or
 # modify it under the terms of the GNU Library General Public
 # License as published by the Free Software Foundation; either
@@ -15,7 +6,7 @@
 #
 # This library is distributed in the hope that it will be useful,
 # but WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
 # GNU Library General Public License for more details.
 #
 # You should have received a copy of the GNU Library General
@@ -25,7 +16,7 @@
 
 # Copyrights (C)
 # for this R-port: 
-#   1999 - 2005, Diethelm Wuertz, GPL
+#   1999 - 2004, Diethelm Wuertz, GPL
 #   Diethelm Wuertz <wuertz@itp.phys.ethz.ch>
 #   info@rmetrics.org
 #   www.rmetrics.org
@@ -37,20 +28,35 @@
 
 
 ################################################################################
+# FUNCTION:                 REGRESSION TERM PLOTS
+#  .termPlot                 Line Plot          
+#  .termPersp                Perspective Plot         
+#  .termContour              Contour Plot
+################################################################################
 
 
-.First.lib = 
-function(lib, pkg)
-{   # A function implemented by Diethelm Wuertz
+### Uncomplete - Under Development ###
+
+
+test.NA = 
+function()
+{
+    NA
     
-    # Package:
-    cat("\nRmetrics, (C) 1999-2005, Diethelm Wuertz, GPL")
-    cat("\nfMultivariate: Multivariate Financial Markets Analysis\n")
-
-    # Load dll:
-    library.dynam("fMultivar", pkg, lib)
+    # Return Value:
+    return()
 }
 
 
-################################################################################
+# ------------------------------------------------------------------------------
 
+
+if (FALSE) {
+    require(RUnit)
+    testResult = runTestFile("C:/Rmetrics/SVN/trunk/fMultivar/test/runit2C.R")
+    printTextProtocol(testResult)
+}
+   
+
+################################################################################
+    
