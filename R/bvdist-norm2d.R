@@ -14,30 +14,19 @@
 # Free Foundation, Inc., 59 Temple Place, Suite 330, Boston,
 # MA  02111-1307  USA
 
-# Copyrights (C)
-# for this R-port:
-#   1999 - 2007, Diethelm Wuertz, GPL
-#   Diethelm Wuertz <wuertz@itp.phys.ethz.ch>
-#   info@rmetrics.org
-#   www.rmetrics.org
-# for the code accessed (or partly included) from other R-ports:
-#   see R's copyright and license files
-# for the code accessed (or partly included) from contributed R-ports
-# and other sources
-#   see Rmetrics's copyright file
-
 
 ################################################################################
 # FUNCTION:             BIVARIATE NORMAL DISTRIBUTION:
-#  pnorm2d               Computes bivariate Normal probability function
 #  dnorm2d               Computes bivariate Normal density function
+#  pnorm2d               Computes bivariate Normal probability function
 #  rnorm2d               Generates bivariate normal random deviates
 ################################################################################
 
 
-pnorm2d =
-function(x, y = x, rho = 0)
-{   # pnorm2d: A copy from R package "sn"
+pnorm2d <-
+    function(x, y = x, rho = 0)
+{   
+    # pnorm2d: A copy from R package "sn"
 
     # Description:
     #   Computes bivariate Normal probability function
@@ -53,8 +42,8 @@ function(x, y = x, rho = 0)
     # FUNCTION:
 
     # Probaility:
-    X = cbind(x, y)
-    ans = apply(X, 1, .pnorm2d, rho = rho)
+    X <- cbind(x, y)
+    ans <- apply(X, 1, .pnorm2d, rho = rho)
     attr(ans, "control") = c(rho = rho)
 
 
@@ -66,9 +55,10 @@ function(x, y = x, rho = 0)
 # ------------------------------------------------------------------------------
 
 
-.pnorm2d =
-function(X, rho = 0)
-{   # pnorm2d: A copy from R package "sn"
+.pnorm2d <- 
+    function(X, rho = 0)
+{   
+    # pnorm2d: A copy from R package "sn"
 
     # Description:
     #   Bivariate Normal probability function
@@ -84,8 +74,8 @@ function(X, rho = 0)
     # FUNCTION:
 
     # Probability:
-    x = X[1]
-    y = X[2]
+    x <- X[1]
+    y <- X[2]
     if (x == 0 & y == 0) {
         return(0.25 + asin(rho)/(2 * pi))
     }
@@ -125,8 +115,9 @@ function(X, rho = 0)
 
 
 .TInt =
-function(h, a, jmax, cut.point)
-{   # T.int: A copy from R package "sn"
+    function(h, a, jmax, cut.point)
+{   
+    # T.int: A copy from R package "sn"
 
     # Note:
     #   Required by .pnorm2d and .TOwen
@@ -165,9 +156,10 @@ function(h, a, jmax, cut.point)
 # ------------------------------------------------------------------------------
 
 
-.TOwen =
-function (h, a, jmax = 50, cut.point = 6)
-{   # T.Owen: A copy from R package "sn"
+.TOwen <- 
+    function (h, a, jmax = 50, cut.point = 6)
+{   
+    # T.Owen: A copy from R package "sn"
 
     # Note:
     #   Required by .pnorm2d
@@ -205,9 +197,10 @@ function (h, a, jmax = 50, cut.point = 6)
 # ------------------------------------------------------------------------------
 
 
-dnorm2d =
-function(x, y = x, rho = 0)
-{   # A function implemented by Diethelm Wuertz
+dnorm2d <- 
+    function(x, y = x, rho = 0)
+{   
+    # A function implemented by Diethelm Wuertz
 
     # Arguments:
     #   x,y - two numeric vectors
@@ -289,9 +282,10 @@ function(x, y = x, rho = 0)
 # ------------------------------------------------------------------------------
 
 
-rnorm2d =
-function(n, rho = 0)
-{   # A function implemented by Diethelm Wuertz
+rnorm2d <- 
+    function(n, rho = 0)
+{   
+    # A function implemented by Diethelm Wuertz
 
     # Description:
     #   Generates bivariate normal random deviates
@@ -330,9 +324,10 @@ function(n, rho = 0)
 # ------------------------------------------------------------------------------
 
 
-.rnorm2d =
-function(n, rho = 0)
-{   # A function implemented by Diethelm Wuertz
+.rnorm2d <- 
+    function(n, rho = 0)
+{   
+    # A function implemented by Diethelm Wuertz
 
     # Description:
     #   Alternative direct algorithm from Lindskog Master Thesis
@@ -361,4 +356,6 @@ function(n, rho = 0)
 }
 
 
-################################################################################
+###############################################################################
+
+

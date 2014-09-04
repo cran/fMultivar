@@ -1,6 +1,6 @@
-\name{BivariateBinning}
+\name{utils-binning2}
 
-\alias{BivariateBinning}
+\alias{utils-binning2}
 
 \alias{squareBinning}
 \alias{hexBinning}
@@ -12,17 +12,9 @@
 
 \description{
     
-    A collection and description of functions which
-    allow to create histograms due to sqaure and
-    hexagonal binning.
-    \cr
-
-    Bivariate Binning Functions:
-    
-    \tabular{ll}{
-    \code{squareBinning} \tab does a square binning of data points, \cr
-    \code{hexBinning} \tab does a hexagonal binning of data points}
-    
+    Two functions which allow to create histograms due to sqaure 
+    and hexagonal binning.
+  
 }
 
 
@@ -35,6 +27,7 @@ hexBinning(x, y = NULL, bins = 30)
 \method{plot}{hexBinning}(x, col = heat.colors(12), addPoints = TRUE, 
     addRug = TRUE, \dots)
 }
+
 
 \arguments{
   
@@ -80,6 +73,14 @@ hexBinning(x, y = NULL, bins = 30)
 }
 
 
+\details{
+
+    \code{squareBinning} does a square binning of data points, and
+    \code{hexBinning} does a hexagonal binning of data points.
+    
+}
+
+
 \author{
 
     Diethelm Wuertz for the Rmetrics \R-port.
@@ -89,11 +90,11 @@ hexBinning(x, y = NULL, bins = 30)
 
 \examples{
 ## squareBinning -
-   sB = squareBinning(x = rnorm(1000), y = rnorm(1000))
+   sB <- squareBinning(x = rnorm(1000), y = rnorm(1000))
    plot(sB)
    
 ## hexBinning -
-   hB = hexBinning(x = rnorm(1000), y = rnorm(1000))
+   hB <- hexBinning(x = rnorm(1000), y = rnorm(1000))
    plot(hB)
 }
 

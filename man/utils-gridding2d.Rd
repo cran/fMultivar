@@ -1,6 +1,6 @@
-\name{BivariateGridding}
+\name{utils-gridding2d}
 
-\alias{BivariateGridding}
+\alias{utils-gridding2}
 
 
 \alias{gridData}
@@ -13,8 +13,7 @@
 
 \description{
     
-    A collection and description of functions which
-    allow to generate bivariate gridded data sets.
+    Functions which allow to generate bivariate gridded data sets.
     \cr
 
     Grid Data Functions:
@@ -84,7 +83,7 @@ gridData(x = (-10:10)/10, y = x, z = outer(x, y, function(x, y) (x^2+y^2) ) )
 
 \examples{
 ## gridData -
-   # Grid Data Set
+   # Grid Data Set:
    gD = gridData()
    persp(gD)
    contour(gD)

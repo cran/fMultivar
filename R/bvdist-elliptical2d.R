@@ -14,31 +14,21 @@
 # Free Foundation, Inc., 59 Temple Place, Suite 330, Boston,
 # MA  02111-1307  USA
 
-# Copyrights (C)
-# for this R-port: 
-#   1999 - 2007, Diethelm Wuertz, GPL
-#   Diethelm Wuertz <wuertz@itp.phys.ethz.ch>
-#   info@rmetrics.org
-#   www.rmetrics.org
-# for the code accessed (or partly included) from other R-ports:
-#   see R's copyright and license files
-# for the code accessed (or partly included) from contributed R-ports
-# and other sources
-#   see Rmetrics's copyright file
-
 
 ################################################################################
-# FUNCTION:             ELLIPTICAL BIVARIATE DISTRIBUTIONS:
+# FUNCTION:             DESCRIPTION:
 #  delliptical2d         Computes density for elliptical distributions
+# FUNCTION:             DESCRIPTION:
 #  .gfunc2d              Generator Function for elliptical distributions
 #  .delliptical2dSlider  Slider for bivariate densities
 ################################################################################
 
 
-delliptical2d =
-function(x, y = x, rho = 0, param = NULL, type = c("norm", "cauchy", "t", 
-"logistic", "laplace", "kotz", "epower"), output = c("vector", "list"))
-{   # A function implemented by Diethelm Wuertz
+delliptical2d <- 
+    function(x, y = x, rho = 0, param = NULL, type = c("norm", "cauchy", "t", 
+    "logistic", "laplace", "kotz", "epower"), output = c("vector", "list"))
+{   
+    # A function implemented by Diethelm Wuertz
 
     # Description:
     #   Density function for bivariate elliptical distributions
@@ -61,16 +51,16 @@ function(x, y = x, rho = 0, param = NULL, type = c("norm", "cauchy", "t",
     # FUNCTION:
     
     # Type:
-    type = type[1]
+    type <- match.arg(type)
     
     # Settings:
     if (is.list(x)) {
-        y = x$y
-        x = x$x
+        y <- x$y
+        x <- x$x
     }
     if (is.matrix(x)) {
-        y = x[, 2]
-        x = x[, 2]
+        y <- x[, 2]
+        x <- x[, 2]
     }
 
     # Add Default Parameters:
@@ -81,11 +71,11 @@ function(x, y = x, rho = 0, param = NULL, type = c("norm", "cauchy", "t",
     }
     
     # Density:
-    xoy = ( x^2 - 2*rho*x*y + y^2 ) / (1-rho^2)
-    lambda = .gfunc2d(param = param, type = type)[[1]]
-    density = lambda * .gfunc2d(x = xoy, param = param, type = type) /
+    xoy <- ( x^2 - 2*rho*x*y + y^2 ) / (1-rho^2)
+    lambda <- .gfunc2d(param = param, type = type)[[1]]
+    density <- lambda * .gfunc2d(x = xoy, param = param, type = type) /
         sqrt(1 - rho^2)
-        
+    
     # Add attributes:
     if (is.null(param)) {
         attr(density, "control") = unlist(list(type = type, rho = rho))
@@ -111,10 +101,11 @@ function(x, y = x, rho = 0, param = NULL, type = c("norm", "cauchy", "t",
 
 
 .gfunc2d = 
-function(x, param = NULL, type = c("norm", "cauchy", "t", "logistic", 
-"laplace", "kotz", "epower"))
-{   # A function implemented by Diethelm Wuertz
-
+    function(x, param = NULL, type = c("norm", "cauchy", "t", "logistic", 
+    "laplace", "kotz", "epower"))
+{   
+    # A function implemented by Diethelm Wuertz
+    
     # Description:
     #   Generator function for elliptical distributions
     
@@ -245,9 +236,10 @@ function(x, param = NULL, type = c("norm", "cauchy", "t", "logistic",
 # ------------------------------------------------------------------------------
 
 
-.delliptical2dSlider =
-function(B = 10, eps = 1.e-3)
-{   # A function implemented by Diethelm Wuertz
+.delliptical2dSlider <-
+    function(B = 10, eps = 1.e-3)
+{   
+    # A function implemented by Diethelm Wuertz
         
     # Description:
     #   Displays interactively perspective plots of density
@@ -310,4 +302,5 @@ function(B = 10, eps = 1.e-3)
 
 
 ################################################################################
+
 

@@ -1,9 +1,10 @@
-\name{t2d}
+\name{bvdist-t2d}
 
 
 \alias{t2d}
-\alias{pt2d}
+
 \alias{dt2d}
+\alias{pt2d}
 \alias{rt2d}
 
 
@@ -12,16 +13,15 @@
 
 \description{
     
-    Density, distribution function, and random 
-    generation for the bivariate Student-t 
-    distribution. 
+    Density, distribution function, and random generation for 
+    the bivariate Student-t distribution. 
     
 }
 
 
 \usage{
-pt2d(x, y = x, rho = 0, nu = 4)
-dt2d(x, y = x, rho = 0, nu = 4)
+dt2d(x, y, rho = 0, nu = 4)
+pt2d(x, y, rho = 0, nu = 4)
 rt2d(n, rho = 0, nu = 4)
 }
 
@@ -81,19 +81,33 @@ Venables W.N., Ripley B.D., (2002);
 
 \author{
 
-    Adelchi Azzalini for the underlying pnorm2d function, \cr
+    Adelchi Azzalini for the underlying \code{pnorm2d} function, \cr
     Diethelm Wuertz for the Rmetrics \R-port.
     
 }
 
 
 \examples{
-## Bivariate Student-t Density:
-   x = (-40:40)/10
-   X = grid2d(x)
-   z = dt2d(X$x, X$y, rho = 0.5, nu =6)
-   Z = list(x = x, y = x, z = matrix(z, ncol = length(x)))
+## dt2d -
+   # Bivariate Student-t Density:
+   x <- (-40:40)/10
+   X <- grid2d(x)
+   z <- dt2d(X$x, X$y, rho = 0.5, nu = 6)
+   Z <- list(x = x, y = x, z = matrix(z, ncol = length(x)))
+   # Perspective Plot:
    persp(Z, theta = -40, phi = 30, col = "steelblue")
+   # Contour Plot:
+   contour(Z)
+   
+## pt2d -
+   # Bivariate Student-t Probability:
+   x <- (-40:40)/10
+   X <- grid2d(x)
+   z <- pt2d(X$x, X$y, rho = 0.5, nu = 6)
+   Z <- list(x = x, y = x, z = matrix(z, ncol = length(x)))
+   # Image Plot with Contours:
+   image(Z)
+   contour(Z, add=TRUE)
 }
 
 

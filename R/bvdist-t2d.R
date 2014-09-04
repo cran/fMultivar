@@ -14,30 +14,21 @@
 # Free Foundation, Inc., 59 Temple Place, Suite 330, Boston,
 # MA  02111-1307  USA
 
-# Copyrights (C)
-# for this R-port: 
-#   1999 - 2007, Diethelm Wuertz, GPL
-#   Diethelm Wuertz <wuertz@itp.phys.ethz.ch>
-#   info@rmetrics.org
-#   www.rmetrics.org
-# for the code accessed (or partly included) from other R-ports:
-#   see R's copyright and license files
-# for the code accessed (or partly included) from contributed R-ports
-# and other sources
-#   see Rmetrics's copyright file
-
 
 ################################################################################
 # FUNCTION:             BIVARIATE STUDENT-T DISTRIBUTION:
 #  pt2d                  Computes bivariate Student-t probability function
 #  dt2d                  Computes bivariate Student-t density function
 #  rt2d                  Generates bivariate Student-t random deviates
+# REQUIRES:
+#  mvtnorm
 ################################################################################
 
 
-pt2d = 
-function(x, y = x, rho = 0, nu = 4) 
-{   # pnorm2d: A copy from R package "sn"
+pt2d <-  
+    function(x, y = x, rho = 0, nu = 4) 
+{   
+    # pt2d: Uses pmvt from R package "sn"
 
     # Description:
     #   Computes bivariate Student-t probability function
@@ -59,26 +50,32 @@ function(x, y = x, rho = 0, nu = 4)
     if (nu == Inf) return(pnorm2d(x = x, y = y, rho = rho)) 
     
     # Settings:
-    sigma = diag(2) 
-    sigma[1, 2] = sigma[2, 1] = rho 
-    X = cbind(x, y)
+    sigma <- diag(2) 
+    sigma[1, 2] <- sigma[2, 1] <- rho 
+    X <- cbind(x, y)
     
     # Probaility:
-    ans  = pmvst(X, dim = 2, mu = c(0, 0), Omega = sigma, 
-        alpha = c(0, 0), df = nu) 
-    attr(ans, "control") = c(rho = rho, nu = nu)
+    # ans  <- pmvt(X, dim = 2, mu = c(0, 0), Omega = sigma, 
+    # alpha = c(0, 0), df = nu) 
+    .pmvt <- function(x, delta, sigma, df)
+       mvtnorm::pmvt(
+         lower = -Inf, upper = x, delta = delta, sigma = sigma, df = df)        
+    ans <-  apply(X, 1, ".pmvt", delta = c(0,0), sigma = sigma, df = nu)
+    attr(ans, "control") <- c(rho = rho, nu = nu)
     
     # Return Value:
     ans
 }
+    
+    
+
+# -----------------------------------------------------------------------------
 
 
-# ------------------------------------------------------------------------------
-
-
-dt2d = 
-function(x, y = x, rho = 0, nu = 4)
-{   # A function implemented by Diethelm Wuertz
+dt2d <-  
+    function(x, y = x, rho = 0, nu = 4)
+{   
+    # A function implemented by Diethelm Wuertz
 
     # Arguments:
     #   n - number of random deviates to be generated
@@ -100,23 +97,24 @@ function(x, y = x, rho = 0, nu = 4)
     if (nu == Inf) return(dnorm2d(x = x, y = y, rho = rho)) 
     
     # Argument:
-    xoy = (x^2 - 2*rho*x*y + y^2)/ (2*(1 - rho^2))
+    xoy <- (x^2 - 2*rho*x*y + y^2)/ (2*(1 - rho^2))
     
     # Density:
-    density = (1 + 2*xoy/nu)^(-(nu+2)/2) / (2*pi*sqrt(1-rho^2))
-    attr(density, "control") = c(rho = rho, nu = nu)
+    density <- (1 + 2*xoy/nu)^(-(nu+2)/2) / (2*pi*sqrt(1-rho^2))
+    attr(density, "control") <- c(rho = rho, nu = nu)
     
     # Return value:
     density
 }
 
 
-# ------------------------------------------------------------------------------
+# -----------------------------------------------------------------------------
 
 
-rt2d =
-function(n, rho = 0, nu = 4) 
-{   # A function implemented by Diethelm Wuertz
+rt2d <-
+    function(n, rho = 0, nu = 4) 
+{   
+    # A function implemented by Diethelm Wuertz
 
     # Description:
     #   Generates bivariate Student-t random deviates
@@ -136,13 +134,14 @@ function(n, rho = 0, nu = 4)
     if (nu == Inf) return(rnorm2d(n = n, rho = rho)) 
     
     # Random Deviates:
-    ans = rnorm2d(n, rho)/sqrt(rchisq(n, nu)/nu)
-    attr(ans, "control") = c(rho = rho, nu = nu)
+    ans <- rnorm2d(n, rho)/sqrt(rchisq(n, nu)/nu)
+    attr(ans, "control") <- c(rho = rho, nu = nu)
     
     # Return Value:
     ans
 }
 
 
-################################################################################
+###############################################################################
+
 

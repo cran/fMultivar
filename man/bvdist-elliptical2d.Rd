@@ -1,4 +1,4 @@
-\name{elliptical2d}
+\name{bvdist-elliptical2d}
 
 
 \alias{elliptical2d}
@@ -16,13 +16,16 @@
 
 
 \usage{
-delliptical2d(x, y = x, rho = 0, param = NULL, type = c("norm", "cauchy", "t", 
+delliptical2d(x, y, rho = 0, param = NULL, type = c("norm", "cauchy", "t", 
     "logistic", "laplace", "kotz", "epower"), output = c("vector", "list"))
 }
 
 
 \arguments{
 
+    \item{x, y}{
+        two numeric vectors defining the x and y coordinates. \cr
+        }       
     \item{output}{
         output - a character string specifying how the output should be 
         formatted. By default a vector of the same length as \code{u} 
@@ -49,10 +52,6 @@ delliptical2d(x, y = x, rho = 0, param = NULL, type = c("norm", "cauchy", "t",
         from: \code{"norm"}, \code{"cauchy"}, \code{"t"}, \code{"laplace"}, 
         \code{"kotz"}, or \code{"epower"}.
         }
-    \item{x, y}{
-        two numeric vectors defining the x and y coordinates. \cr
-        }
-        
 }
 
 
@@ -87,14 +86,27 @@ Venables W.N., Ripley B.D., (2002);
 
 
 \examples{
-## Kotz' Elliptical Density:
-   x = (-40:40)/10
-   X = grid2d(x)
-   z = delliptical2d(X$x, X$y, rho = 0.5, type = "kotz")
-   Z = list(x = x, y = x, z = matrix(z, ncol = length(x)))
+## delliptical2d -
+   # Kotz' Elliptical Density:
+   x <- (-40:40)/10
+   X <- grid2d(x)
+   z <- delliptical2d(X$x, X$y, rho = 0.5, type = "kotz")
+   Z <- list(x = x, y = x, z = matrix(z, ncol = length(x)))
+   
+## Perspective Plot:
    persp(Z, theta = -40, phi = 30, col = "steelblue")
+   
+## Image Plot with Contours:
+   image(Z, main = "Bivariate Kotz")
+   contour(Z, add=TRUE)
+   
+## Internal Density Slider:
+   \dontrun{
+   .delliptical2dSlider()
+   }
 }
 
 
 \keyword{math}
+
 

@@ -14,25 +14,12 @@
 # Free Foundation, Inc., 59 Temple Place, Suite 330, Boston,
 # MA  02111-1307  USA
 
-# Copyrights (C)
-# for this R-port: 
-#   1999 - 2007, Diethelm Wuertz, GPL
-#   Diethelm Wuertz <wuertz@itp.phys.ethz.ch>
-#   info@rmetrics.org
-#   www.rmetrics.org
-# for the code accessed (or partly included) from other R-ports:
-#   see R's copyright and license files
-# for the code accessed (or partly included) from contributed R-ports
-# and other sources
-#   see Rmetrics's copyright file
-
 
 ################################################################################
 # FUNCTION:             DESCRIPTION:
 #  grid2d                Returns from two vectors x-y grid coordinates
 #  density2d             Returns 2D Kernel Density Estimates
 #  hist2d                Returns 2D Histogram Counts
-#  integrate2d           Integrates over a two dimensional unit square
 # FUNCTION:             BIVARIATE DISTRIBUTIONS:
 #  pnorm2d               Computes bivariate Normal probability function
 #  dnorm2d               Computes bivariate Normal density function
@@ -45,8 +32,9 @@
 #  rt2d                  Generates bivariate Student-t random deviates
 # FUNCTION:             ELLIPTICAL DISTRIBUTIONS:
 #  delliptical2d         Computes density for elliptical distributions
-#  .gfunc2d              Generator Function for elliptical distributions
-#  .delliptical2dSlider  Slider for bivariate densities
+# REQUIREMENTS:
+#  fBasics::.perspPlot
+#  fBasics::.contourPlot
 ################################################################################
 
 
@@ -65,10 +53,10 @@ function()
 
 
 test.density2d =
-function()
+    function()
 {
     # Data:
-    z = rnorm2d(1000)
+    z <- rnorm2d(1000)
     
     # Density:
     D = density2d(x = z[, 1], y = z[, 2])
@@ -84,13 +72,13 @@ function()
 
 
 test.hist2d =
-function()
+    function()
 {
     # Data:
-    z = rnorm2d(1000)
+    z <- rnorm2d(1000)
    
     # Histogram:
-    H = hist2d(x = z[, 1], y = z[, 2])
+    H <- hist2d(x = z[, 1], y = z[, 2])
     .perspPlot(H)
     .contourPlot(H)
 
@@ -102,22 +90,8 @@ function()
 # ------------------------------------------------------------------------------
 
 
-test.integrate2d =
-function()
-{
-    # Data:
-    z = rnorm2d(1000)
-  
-    # Return Value:
-    return()    
-}
-
-
-# ------------------------------------------------------------------------------
-
-
 test.norm2d =
-function()
+    function()
 {
     #  pnorm2d - Computes bivariate Normal probability function
     #  dnorm2d - Computes bivariate Normal density function
@@ -148,7 +122,7 @@ function()
 
 
 test.cauchy2d =
-function()
+    function()
 {
     #  pcauchy2d - Computes bivariate Cauchy probability function
     #  dcauchy2d - Computes bivariate Cauchy density function
@@ -179,7 +153,7 @@ function()
 
 
 test.t2d =
-function()
+    function()
 {
     #  pt2d - Computes bivariate Student-t probability function
     #  dt2d - Computes bivariate Student-t density function
@@ -210,13 +184,12 @@ function()
 
 
 test.delliptical2d =
-function()
+    function()
 { 
     # Settings:
     xy = grid2d((-50:50)/10)
     
     # Contour Plots:
-    par(ask = FALSE)
     par(mfrow = c(1, 1))
     contour(delliptical2d(xy, rho = 0.75, param = NULL, 
         type = "norm", output = "list"), main = "norm")

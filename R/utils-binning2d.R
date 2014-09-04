@@ -14,18 +14,6 @@
 # Free Foundation, Inc., 59 Temple Place, Suite 330, Boston, 
 # MA  02111-1307  USA
 
-# Copyrights (C)
-# for this R-port: 
-#   1999 - 2007, Diethelm Wuertz, GPL
-#   Diethelm Wuertz <wuertz@itp.phys.ethz.ch>
-#   info@rmetrics.org
-#   www.rmetrics.org
-# for the code accessed (or partly included) from other R-ports:
-#   see R's copyright and license files
-# for the code accessed (or partly included) from contributed R-ports
-# and other sources
-#   see Rmetrics's copyright file
-
 
 ################################################################################
 # FUNCTION:                 DESCRIPTION:
@@ -43,9 +31,10 @@
 #  plot                      S3 Method for plotting square binned points
 
 
-squareBinning = 
-function(x, y = NULL, bins = 30)
-{   # A function implemented by Diethelm Wuertz
+squareBinning <- 
+    function(x, y = NULL, bins = 30)
+{   
+    # A function implemented by Diethelm Wuertz
 
     # Description:
     #   Returns 2D Histogram Counts
@@ -137,9 +126,10 @@ function(x, y = NULL, bins = 30)
 # ------------------------------------------------------------------------------
 
 
-plot.squareBinning =
-function(x, col = heat.colors(12), addPoints = TRUE, addRug = TRUE, ...)
-{   # A function implemented by Diethelm Wuertz
+plot.squareBinning <-
+    function(x, col = heat.colors(12), addPoints = TRUE, addRug = TRUE, ...)
+{   
+    # A function implemented by Diethelm Wuertz
 
     # Description:
     #   Plot square binned data points
@@ -195,9 +185,10 @@ function(x, col = heat.colors(12), addPoints = TRUE, addRug = TRUE, ...)
 #  plot                      S3 Method for plotting hexagonal binned points
 
 
-hexBinning = 
-function(x, y = NULL, bins = 30)
-{   # A function implemented by Diethelm Wuertz
+hexBinning <- 
+    function(x, y = NULL, bins = 30)
+{   
+    # A function implemented by Diethelm Wuertz
 
     # Description:
     #   Does a hexagonal binning of data points
@@ -317,9 +308,10 @@ function(x, y = NULL, bins = 30)
 # ------------------------------------------------------------------------------
 
 
-plot.hexBinning =
-function(x, col = heat.colors(12), addPoints = TRUE, addRug = TRUE, ...)
-{   # A function implemented by Diethelm Wuertz
+plot.hexBinning <-
+    function(x, col = heat.colors(12), addPoints = TRUE, addRug = TRUE, ...)
+{   
+    # A function implemented by Diethelm Wuertz
 
     # Description:
     #   Plot hexagonal binned data points
