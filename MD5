@@ -1,6 +1,6 @@
 2e2af13877d8495397932126ba9cde53 *ChangeLog
-501f46aa9f49f43dcd0cfa6a67bec066 *DESCRIPTION
-53fc749bd94a37337fb14f448f81273b *NAMESPACE
+5d9d2a03977e462acd73c614f5db4471 *DESCRIPTION
+0af7584cccb635406fbdb4318ff9e7ee *NAMESPACE
 79a41558ecfadc748f2770f80ddebc45 *NEWS
 839c901173563748d1ad30034a160276 *R/bvdist-cauchy2d.R
 1e3e9f50b692bead0ca965ef347d471b *R/bvdist-elliptical2d.R
@@ -18,16 +18,16 @@ d2d383f081fb37580da44085c68e1f74 *R/utils-gridding2d.R
 a8707cd3827c279cbb41aae069521288 *R/zzz-mvnorm.R
 1221a0abd185276767709ab39d6485f7 *R/zzz-mvstnorm.R
 44e172f024b9e66b815701ad107d876f *R/zzz-mvt.R
-a49504ac40b5d9524ca0b541e6fe7e80 *R/zzz.R
+a819dfe9ff209ff452fbb97e68adef8e *R/zzz.R
 a08b37c03bd1b1ffd908af41916b914f *inst/obsolete/R/utils-adapt.R
 b2b09e1232abe8c632cee4da6ff0e07f *inst/obsolete/man/utils-adapt.Rd
 0ae32d48faf982f676ee2721b1ea4e02 *inst/obsolete/src/adapt2.f
 bf0cc4d5a94a7545fdb9d6dcd73306af *inst/obsolete/src/adapt_callback.c
-c21a9d4df2f42ea6b9cff25c61ccbf24 *inst/unitTests/Makefile
+2a1e2bb5e5b95a898b0b410a8bf4edef *inst/unitTests/Makefile
 077d37383e501be8365cc12a07aad772 *inst/unitTests/runTests.R
 d2bfd8970137a530ed5050b79cc0ee84 *inst/unitTests/runit.BivariateBinning.R
 a721cf260d3a507233745cd10024cee7 *inst/unitTests/runit.BivariateDistributions.R
-0f14f5966cbd8c04c9caad7ac1e5139b *inst/unitTests/runit.BivariateGridding.R
+737539bfb402bd5db1e2c7d95a587149 *inst/unitTests/runit.BivariateGridding.R
 5415d25f40c583866e97c4c4e0808456 *man/00fMultivar-package.Rd
 2f116e94b60b83144c9ad07ce6bfd36a *man/bvdist-cauchy2d.Rd
 e9766a0cea95724986b8733c6a24cfe9 *man/bvdist-elliptical2d.Rd
@@ -39,7 +39,7 @@ b76d0cb2c66b4c3f3bac07161b0878eb *man/bvdist-t2d.Rd
 c67930e35c4b842228849bdf3e9ed1a0 *man/mvdist-msnFit.Rd
 a6bcd92904e7fb072807d184e17a0208 *man/mvdist-mst.Rd
 746a769f13e024ea838abe61c19b9636 *man/mvdist-mstFit.Rd
-3c78b8b6102c6a21bc48037c57cf1ffe *man/utils-adapt.Rd
+34cf0832000be1cec423b1b03488d5d2 *man/utils-adapt.Rd
 a52d0b06eaead7108bd494df0d3c8128 *man/utils-binning2d.Rd
 a25003cf49b2ea2eb2283a2dad5e76aa *man/utils-density2d.Rd
 b765604102cb2b486d4904d7c8fafb48 *man/utils-grid2d.Rd
