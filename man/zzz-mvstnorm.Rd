@@ -86,9 +86,6 @@
     \item{trace}{
         a logical, should the estimation be traced?
         }
-    \item{...}{
-        arguments passed to the underlying "sn" density functions.
-        }
         
 }
 

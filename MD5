@@ -1,5 +1,5 @@
 2e2af13877d8495397932126ba9cde53 *ChangeLog
-5d9d2a03977e462acd73c614f5db4471 *DESCRIPTION
+e96d829d00f6153761eeb477913cef16 *DESCRIPTION
 0af7584cccb635406fbdb4318ff9e7ee *NAMESPACE
 79a41558ecfadc748f2770f80ddebc45 *NEWS
 839c901173563748d1ad30034a160276 *R/bvdist-cauchy2d.R
@@ -46,6 +46,6 @@ b765604102cb2b486d4904d7c8fafb48 *man/utils-grid2d.Rd
 360c5436059fb80058d43f3f88e0af69 *man/utils-gridding2d.Rd
 ebca25b9dd2e071f3a4ad08bdb550972 *man/utils-integrate2d.Rd
 b0e7d4db3a9e7a5cd890483e220bee41 *man/zzz-mvnorm.Rd
-fc532733f8d87a3ccf2f5366400d2d20 *man/zzz-mvstnorm.Rd
+b04bcf65e981de65972d7561cfbb7a59 *man/zzz-mvstnorm.Rd
 6db02de0245a6f7d7a70ba2d72e9f4b4 *man/zzz-mvt.Rd
 ca566e590ec30abd0718c5375e1a446f *tests/doRUnit.R
