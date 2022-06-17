@@ -1,5 +1,5 @@
 2e2af13877d8495397932126ba9cde53 *ChangeLog
-e96d829d00f6153761eeb477913cef16 *DESCRIPTION
+f30f8c0119031173c70a23ba14965738 *DESCRIPTION
 0af7584cccb635406fbdb4318ff9e7ee *NAMESPACE
 79a41558ecfadc748f2770f80ddebc45 *NEWS
 839c901173563748d1ad30034a160276 *R/bvdist-cauchy2d.R
@@ -13,7 +13,7 @@ a1b5fa45a4a537cc1310ec469be62b8a *R/utils-adapt.R
 b136fa46d098c6e4d3f0c6c8e3e7881e *R/utils-binning2d.R
 16db3053ab78c9308decfd0f4160d18f *R/utils-density2d.R
 5ddddd16b3f118db35d2b1f00fb01294 *R/utils-grid2d.R
-d2d383f081fb37580da44085c68e1f74 *R/utils-gridding2d.R
+f3de2f372eaf8b32652a8cd470677e0e *R/utils-gridding2d.R
 88a467e45dfe2ef037ba709489233fef *R/utils-integrate2d.R
 a8707cd3827c279cbb41aae069521288 *R/zzz-mvnorm.R
 1221a0abd185276767709ab39d6485f7 *R/zzz-mvstnorm.R
@@ -44,7 +44,7 @@ a52d0b06eaead7108bd494df0d3c8128 *man/utils-binning2d.Rd
 a25003cf49b2ea2eb2283a2dad5e76aa *man/utils-density2d.Rd
 b765604102cb2b486d4904d7c8fafb48 *man/utils-grid2d.Rd
 360c5436059fb80058d43f3f88e0af69 *man/utils-gridding2d.Rd
-ebca25b9dd2e071f3a4ad08bdb550972 *man/utils-integrate2d.Rd
+4fd958a07c97de8387f1da935d544a8c *man/utils-integrate2d.Rd
 b0e7d4db3a9e7a5cd890483e220bee41 *man/zzz-mvnorm.Rd
 b04bcf65e981de65972d7561cfbb7a59 *man/zzz-mvstnorm.Rd
 6db02de0245a6f7d7a70ba2d72e9f4b4 *man/zzz-mvt.Rd
