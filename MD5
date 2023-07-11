@@ -1,5 +1,5 @@
 2e2af13877d8495397932126ba9cde53 *ChangeLog
-55ee1a286cd574127388973e30308fb0 *DESCRIPTION
+eec801a65e12b593a0dbd666855ba2d1 *DESCRIPTION
 9b6fcee6da1c7ba8ce6d540cd91360e2 *NAMESPACE
 79a41558ecfadc748f2770f80ddebc45 *NEWS
 839c901173563748d1ad30034a160276 *R/bvdist-cauchy2d.R
@@ -33,11 +33,11 @@ c34a1f34e065164affccdcb82bb6bc84 *inst/unitTests/runit.BivariateDistributions.R
 e9766a0cea95724986b8733c6a24cfe9 *man/bvdist-elliptical2d.Rd
 4efa8cea208944b2f96974b9ce67039b *man/bvdist-norm2d.Rd
 b76d0cb2c66b4c3f3bac07161b0878eb *man/bvdist-t2d.Rd
-262e01ec1cd79ce4227ed4a772dec5dd *man/mvdist-msc.Rd
+43d4d1213cd342c7c80008dd7e4a0a6d *man/mvdist-msc.Rd
 901d0d6368be039af23e31f704e3eb17 *man/mvdist-mscFit.Rd
-21b5ea20c5c235b98711cf0ab01b88cf *man/mvdist-msn.Rd
+bb5abb072ab393bd063f0592e11d82e3 *man/mvdist-msn.Rd
 c67930e35c4b842228849bdf3e9ed1a0 *man/mvdist-msnFit.Rd
-a6bcd92904e7fb072807d184e17a0208 *man/mvdist-mst.Rd
+83bfc214cab94f1d48be1d88214bf2b7 *man/mvdist-mst.Rd
 746a769f13e024ea838abe61c19b9636 *man/mvdist-mstFit.Rd
 34cf0832000be1cec423b1b03488d5d2 *man/utils-adapt.Rd
 a52d0b06eaead7108bd494df0d3c8128 *man/utils-binning2d.Rd
@@ -45,7 +45,7 @@ a25003cf49b2ea2eb2283a2dad5e76aa *man/utils-density2d.Rd
 b765604102cb2b486d4904d7c8fafb48 *man/utils-grid2d.Rd
 360c5436059fb80058d43f3f88e0af69 *man/utils-gridding2d.Rd
 4fd958a07c97de8387f1da935d544a8c *man/utils-integrate2d.Rd
-b0e7d4db3a9e7a5cd890483e220bee41 *man/zzz-mvnorm.Rd
+da82f3348fa5b5fe5c6a05b56c7846ad *man/zzz-mvnorm.Rd
 00ca2a3c202714a516c1383ce536c581 *man/zzz-mvstnorm.Rd
-6db02de0245a6f7d7a70ba2d72e9f4b4 *man/zzz-mvt.Rd
+065443f293791100b3ab9cb2b89cab85 *man/zzz-mvt.Rd
 ca566e590ec30abd0718c5375e1a446f *tests/doRUnit.R
